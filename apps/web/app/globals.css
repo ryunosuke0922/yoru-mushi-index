@@ -604,6 +604,7 @@ h2 {
   animation: soft-enter 420ms var(--ease-out) both;
   align-items: center;
   background: var(--surface-soft);
+  border: 0.5px solid transparent;
   border-radius: 18px;
   display: flex;
   gap: 12px;
@@ -644,6 +645,25 @@ h2 {
   font-weight: 800;
 }
 
+.hour-highlight,
+.taxon-highlight,
+.daily-card-highlight {
+  background: var(--green-soft);
+  border-color: var(--green-border-hover);
+}
+
+.hour-highlight time,
+.taxon-highlight span,
+.daily-card-highlight > span,
+.daily-card-highlight small {
+  color: var(--green);
+}
+
+.hour-highlight strong,
+.taxon-highlight strong {
+  color: var(--green);
+}
+
 .meter {
   background: var(--green-track);
   border-radius: 999px;
@@ -670,6 +690,15 @@ h2 {
   transform: translate(-50%, -50%) scale(1.32);
 }
 
+.hour-highlight .meter {
+  background: var(--green-border-hover);
+}
+
+.hour-highlight .meter span {
+  height: 12px;
+  width: 12px;
+}
+
 .data-grid {
   display: grid;
   gap: 10px;
@@ -689,6 +718,7 @@ h2 {
 .daily-card {
   animation: soft-enter 420ms var(--ease-out) both;
   background: var(--surface-soft);
+  border: 0.5px solid transparent;
   border-radius: 18px;
   display: grid;
   gap: 7px;
@@ -741,6 +771,10 @@ h2 {
   color: var(--green);
   font-size: 1.85rem;
   line-height: 1;
+}
+
+.daily-card-highlight strong {
+  color: var(--green);
 }
 
 .daily-card p {

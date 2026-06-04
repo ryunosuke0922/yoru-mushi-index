@@ -8,6 +8,7 @@ type ForecastDashboardProps = {
   showAreaLink?: boolean;
   showAreaName?: boolean;
 };
+const highlightScore = 70;
 
 export function ForecastDashboard({
   forecast,
@@ -79,7 +80,10 @@ export function ForecastDashboard({
           <SectionHeading kicker="TIME" title="おすすめ時間" />
           <div className="hourly">
             {forecast.hourly.map((item) => (
-              <div className="hour" key={item.time}>
+              <div
+                className={`hour ${isHighlightedScore(item.score) ? "hour-highlight" : ""}`}
+                key={item.time}
+              >
                 <time>{formatHour(item.time)}</time>
                 <div className="meter" aria-hidden="true">
                   <span style={{ left: `${item.score}%` }} />
@@ -93,15 +97,21 @@ export function ForecastDashboard({
         <article className="panel">
           <SectionHeading kicker="TAXA" title="分類別" />
           <div className="taxa">
-            <div className="taxon">
+            <div
+              className={`taxon ${isHighlightedScore(forecast.taxa?.moths) ? "taxon-highlight" : ""}`}
+            >
               <span>蛾</span>
               <strong>{forecast.taxa?.moths ?? "-"}</strong>
             </div>
-            <div className="taxon">
+            <div
+              className={`taxon ${isHighlightedScore(forecast.taxa?.beetles) ? "taxon-highlight" : ""}`}
+            >
               <span>甲虫</span>
               <strong>{forecast.taxa?.beetles ?? "-"}</strong>
             </div>
-            <div className="taxon">
+            <div
+              className={`taxon ${isHighlightedScore(forecast.taxa?.aquaticInsects) ? "taxon-highlight" : ""}`}
+            >
               <span>水辺の羽虫</span>
               <strong>{forecast.taxa?.aquaticInsects ?? "-"}</strong>
             </div>
@@ -163,7 +173,10 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
       <SectionHeading kicker="DAILY" title="7 日分の指数" />
       <div className="daily-grid">
         {forecasts.map((forecast) => (
-          <article className="daily-card" key={forecast.date}>
+          <article
+            className={`daily-card ${isHighlightedScore(forecast.score) ? "daily-card-highlight" : ""}`}
+            key={forecast.date}
+          >
             <span>{forecast.date}</span>
             <strong>{forecast.score}</strong>
             <p>{forecast.label}</p>
@@ -178,4 +191,8 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
       </div>
     </section>
   );
+}
+
+function isHighlightedScore(score: number | null | undefined) {
+  return typeof score === "number" && score >= highlightScore;
 }
