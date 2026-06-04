@@ -5,6 +5,7 @@ import {
   WeeklyForecastList,
 } from "./components/ForecastDashboard";
 import { PageScaffold } from "./components/PageScaffold";
+import { ShareButton } from "./components/ShareButton";
 import { DEFAULT_AREA_ID } from "./lib/constants";
 import { buildWeeklyForecast } from "./lib/forecast";
 import { todayKey } from "./lib/format";
@@ -55,9 +56,12 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(pageJsonLd) }}
       />
-      <p className="lead">
-        気温、湿度、風、雨、雲量、月明かりから、今夜このエリアで夜間昆虫が飛びやすいかを推定します。
-      </p>
+      <div className="home-intro">
+        <p className="lead">
+          気温、湿度、風、雨、雲量、月明かりから、今夜このエリアで夜間昆虫が飛びやすいかを推定します。
+        </p>
+        <ShareButton text={siteConfig.description} title={siteConfig.name} />
+      </div>
 
       <ForecastDashboard forecast={forecast} />
       <WeeklyForecastList forecasts={forecasts} />
