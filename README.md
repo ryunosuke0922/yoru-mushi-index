@@ -83,7 +83,7 @@ make dev
 ## Environment
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://your-domain.example
+NEXT_PUBLIC_SITE_URL=https://yorumushi.com
 ```
 
 `NEXT_PUBLIC_SITE_URL` is used for canonical URLs, Open Graph URLs, robots.txt, and sitemap.xml.

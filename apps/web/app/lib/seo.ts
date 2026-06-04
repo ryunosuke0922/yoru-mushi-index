@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { CoarseArea } from "@yoru-mushi-index/area";
 
-const defaultSiteUrl = "https://yoru-mushi-index.vercel.app";
+const defaultSiteUrl = "https://yorumushi.com";
 
 function normalizeSiteUrl(value: string | undefined) {
   if (!value) {
