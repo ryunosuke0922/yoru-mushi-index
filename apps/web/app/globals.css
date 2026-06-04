@@ -126,52 +126,6 @@ input:focus-visible {
   color: var(--green);
 }
 
-.lead {
-  color: var(--muted);
-  font-size: clamp(0.68rem, 0.96vw, 0.82rem);
-  font-weight: 600;
-  line-height: 1.6;
-  max-width: 760px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.home-intro {
-  align-items: center;
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.share-button {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: 999px;
-  color: var(--green);
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-size: 0.74rem;
-  font-weight: 800;
-  min-height: 34px;
-  padding: 7px 13px;
-  transition:
-    background var(--motion-fast) var(--ease-out),
-    border-color var(--motion-fast) var(--ease-out),
-    transform var(--motion-fast) var(--ease-out);
-}
-
-.share-button:hover {
-  background: var(--surface-soft);
-  border-color: var(--green-border-hover);
-  transform: translateY(-1px);
-}
-
-.share-button:active {
-  transform: translateY(1px);
-}
-
 .page-intro,
 .document-page {
   background: var(--surface);
@@ -892,15 +846,6 @@ h2 {
     gap: 16px;
     overflow-x: auto;
     width: 100%;
-  }
-
-  .lead {
-    white-space: normal;
-  }
-
-  .home-intro {
-    align-items: start;
-    flex-direction: column;
   }
 
   .page-intro-heading {

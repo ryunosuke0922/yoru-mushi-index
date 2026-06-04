@@ -28,8 +28,9 @@ Next.js App Router のアプリです。
 
 主なファイル:
 
-- `app/page.tsx`: 今日の指数 / 7 日分の指数
+- `app/page.tsx`: エリア選択
 - `app/areas/page.tsx`: エリア選択
+- `app/components/AreaSelector.tsx`: 地方別エリア選択 UI
 - `app/area/[areaId]/page.tsx`: エリア別の今日の指数 / 7 日分の指数
 - `app/api/areas/route.ts`: エリア検索 API
 - `app/api/forecast/route.ts`: 1 日予報 API
