@@ -2,13 +2,13 @@
   --background: #f6f7f3;
   --surface: #ffffff;
   --surface-soft: #eef1eb;
-  --border: #d8ded4;
+  --border: #e1e5dd;
   --text: #26312d;
   --muted: #66736d;
   --subtle: #9aa59f;
   --green: #234c3d;
   --green-soft: #e4ece7;
-  --green-border-hover: rgba(35, 76, 61, 0.22);
+  --green-border-hover: rgba(35, 76, 61, 0.16);
   --green-track: rgba(35, 76, 61, 0.16);
   --accent: #5f8172;
   --font-sans: "Hiragino Sans", "Yu Gothic", "YuGothic", Arial, sans-serif;
