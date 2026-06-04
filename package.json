@@ -1,0 +1,22 @@
+{
+  "name": "yoru-mushi-index",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "scripts": {
+    "dev": "pnpm --filter @yoru-mushi-index/web dev",
+    "build": "pnpm --filter @yoru-mushi-index/web build",
+    "lint": "pnpm --filter @yoru-mushi-index/web lint",
+    "test": "vitest run",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --ignore-unknown --write .",
+    "format:check": "prettier --ignore-unknown --check .",
+    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "prettier": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
