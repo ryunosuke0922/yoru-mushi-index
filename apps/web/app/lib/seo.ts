@@ -64,7 +64,7 @@ export function createPageMetadata({
     openGraph: {
       title: socialTitle,
       description,
-      url: path,
+      url: canonicalPath,
       siteName: siteConfig.name,
       locale: siteConfig.locale,
       type,

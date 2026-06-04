@@ -7,7 +7,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", priority: 1 },
     { path: "/scoring", priority: 0.6 },
     { path: "/data-sources", priority: 0.6 },
-    { path: "/policy", priority: 0.4 },
   ];
 
   const areaRoutes = areaFixtures.map((area) => ({
