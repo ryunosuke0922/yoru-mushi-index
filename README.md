@@ -4,6 +4,14 @@
 
 具体的な観察地点、街灯、採集地、生息地は表示しません。気温、湿度、風、雨、雲量、月条件、季節、広域環境から「今夜このエリアで虫が飛びやすいか」を 0-100 の指数として表示します。
 
+## Production
+
+```txt
+https://yorumushi.com
+```
+
+`www.yorumushi.com` は `yorumushi.com` へリダイレクトします。
+
 ## Features
 
 - 対応エリアの選択
@@ -106,6 +114,7 @@ CI checks:
 
 - [Architecture](docs/architecture.md)
 - [Development](docs/development.md)
+- [Deployment](docs/deployment.md)
 - [Screens](docs/screens.md)
 - [API Design](docs/api-design.md)
 - [Scoring](docs/scoring.md)

@@ -19,12 +19,28 @@
 - [ ] `/scoring`
 - [ ] `/data-sources`
 
+## Production
+
+- [ ] `https://yorumushi.com/` が 200 を返す
+- [ ] `https://www.yorumushi.com/` が `https://yorumushi.com/` へ redirect する
+- [ ] Vercel の primary domain が `yorumushi.com`
+- [ ] `NEXT_PUBLIC_SITE_URL=https://yorumushi.com`
+- [ ] `NEXT_PUBLIC_GA_MEASUREMENT_ID` が Production に設定済み
+- [ ] Google Analytics タグが本番 HTML に出力されている
+
 ## API
 
 - [ ] `/api/areas?q=奥多摩`
 - [ ] `/api/forecast?areaId=tokyo-tama-20km-01`
 - [ ] `/api/forecast/week?areaId=tokyo-tama-20km-01`
 - [ ] `/api/forecast` の未指定日付が Asia/Tokyo の今日になる
+
+## SEO
+
+- [ ] canonical URL が `https://yorumushi.com` を指す
+- [ ] OG URL / Twitter image URL が `https://yorumushi.com` を指す
+- [ ] `/robots.txt` が `https://yorumushi.com/sitemap.xml` を指す
+- [ ] `/sitemap.xml` に公開ページが含まれる
 
 ## Location Safety
 

@@ -15,10 +15,11 @@
 実装時:
 
 1. [development.md](development.md)
-2. [guidelines/coding.md](guidelines/coding.md)
-3. [guidelines/testing.md](guidelines/testing.md)
-4. [guidelines/review.md](guidelines/review.md)
-5. [decision-log/](decision-log/)
+2. [deployment.md](deployment.md)
+3. [guidelines/coding.md](guidelines/coding.md)
+4. [guidelines/testing.md](guidelines/testing.md)
+5. [guidelines/review.md](guidelines/review.md)
+6. [decision-log/](decision-log/)
 
 ## ファイル一覧
 
@@ -31,6 +32,7 @@
 | [data-sources.md](data-sources.md)           | Open-Meteo / SunCalc / fallback |
 | [location-policy.md](location-policy.md)     | 地点情報の扱い                  |
 | [development.md](development.md)             | 開発・検証手順                  |
+| [deployment.md](deployment.md)               | Vercel / domain / analytics     |
 | [release-checklist.md](release-checklist.md) | リリース前チェック              |
 | [open-questions.md](open-questions.md)       | 未解決論点                      |
 | [guidelines/](guidelines/)                   | 開発ガイドライン                |

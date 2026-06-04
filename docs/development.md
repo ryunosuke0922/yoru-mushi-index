@@ -60,6 +60,17 @@ pnpm test
 pnpm build
 ```
 
+## Environment
+
+Local development can use `.env.local`.
+
+```txt
+NEXT_PUBLIC_SITE_URL=https://yorumushi.com
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+`.env.local` is ignored by git. Public examples belong in `.env.example`.
+
 ## Current Limitations
 
 - エリア fixture は地方別サブエリアを手動定義している。
