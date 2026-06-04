@@ -147,7 +147,7 @@ input:focus-visible {
 
 .share-button {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: 999px;
   color: var(--green);
   cursor: pointer;
@@ -175,7 +175,7 @@ input:focus-visible {
 .page-intro,
 .document-page {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: var(--radius-card);
   margin-bottom: var(--space-section);
   padding: 30px;
@@ -234,8 +234,8 @@ input:focus-visible {
 .area-jump-nav {
   background: color-mix(in srgb, var(--background) 86%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  border-top: 1px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  border-top: 0.5px solid var(--border);
   margin: -4px 0 18px;
   padding: 10px 0;
   position: sticky;
@@ -257,7 +257,7 @@ input:focus-visible {
 
 .area-jump-row a {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: 999px;
   color: var(--green);
   flex: 0 0 auto;
@@ -329,7 +329,7 @@ input:focus-visible {
 
 .area-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: 22px;
   display: grid;
   gap: 6px;
@@ -371,7 +371,7 @@ p {
 
 .forecast-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: var(--radius-card);
   display: grid;
   gap: 28px;
@@ -385,7 +385,7 @@ p {
 }
 
 .forecast-side {
-  border-left: 1px solid var(--border);
+  border-left: 0.5px solid var(--border);
   padding-left: 28px;
 }
 
@@ -589,7 +589,7 @@ h2 {
 .panel,
 .data-section {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   border-radius: var(--radius-panel);
   padding: 24px;
 }
@@ -782,7 +782,7 @@ h2 {
 
 .site-footer {
   align-items: center;
-  border-top: 1px solid var(--border);
+  border-top: 0.5px solid var(--border);
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
@@ -929,7 +929,7 @@ h2 {
 
   .forecast-side {
     border-left: 0;
-    border-top: 1px solid var(--border);
+    border-top: 0.5px solid var(--border);
     padding-left: 0;
     padding-top: 22px;
   }
