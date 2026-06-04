@@ -5,14 +5,13 @@ import { useState } from "react";
 type ShareButtonProps = {
   text: string;
   title: string;
+  url: string;
 };
 
-export function ShareButton({ text, title }: ShareButtonProps) {
+export function ShareButton({ text, title, url }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleShare() {
-    const url = window.location.href;
-
     if (navigator.share) {
       try {
         await navigator.share({
@@ -26,7 +25,7 @@ export function ShareButton({ text, title }: ShareButtonProps) {
       }
     }
 
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(`${text}\n${url}`);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   }

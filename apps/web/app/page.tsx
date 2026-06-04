@@ -9,7 +9,7 @@ import { ShareButton } from "./components/ShareButton";
 import { DEFAULT_AREA_ID } from "./lib/constants";
 import { buildWeeklyForecast } from "./lib/forecast";
 import { todayKey } from "./lib/format";
-import { createPageMetadata, jsonLd, siteConfig } from "./lib/seo";
+import { absoluteUrl, createPageMetadata, jsonLd, siteConfig } from "./lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +26,15 @@ export default async function Home() {
   if (!forecast) {
     notFound();
   }
+
+  const shareTitle = `${forecast.area.name}の夜虫指数は ${forecast.score}`;
+  const shareText = [
+    `${forecast.area.name}の夜虫指数は ${forecast.score} / 100（${forecast.label}）です。`,
+    forecast.bestTime ? `おすすめ時間は ${forecast.bestTime}。` : null,
+    `見込みは ${forecast.probabilityBand}。`,
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
 
   const pageJsonLd = {
     "@context": "https://schema.org",
@@ -60,7 +69,11 @@ export default async function Home() {
         <p className="lead">
           気温、湿度、風、雨、雲量、月明かりから、今夜このエリアで夜間昆虫が飛びやすいかを推定します。
         </p>
-        <ShareButton text={siteConfig.description} title={siteConfig.name} />
+        <ShareButton
+          text={shareText}
+          title={shareTitle}
+          url={absoluteUrl("/")}
+        />
       </div>
 
       <ForecastDashboard forecast={forecast} />
