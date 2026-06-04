@@ -44,3 +44,7 @@
 ## `/data-sources`
 
 天気と月条件のデータソースを表示します。
+
+## `/sources`
+
+`/data-sources` へリダイレクトします。

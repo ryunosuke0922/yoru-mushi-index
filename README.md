@@ -25,6 +25,7 @@
 /policy                   地点情報ポリシー
 /scoring                  スコア説明
 /data-sources             データソース説明
+/sources                  /data-sources へのリダイレクト
 ```
 
 ## API
