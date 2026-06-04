@@ -40,6 +40,7 @@ Next.js App Router のアプリです。
 - `app/lib/seo.ts`: metadata / JSON-LD / social image metadata
 - `app/lib/ogImage.tsx`: OG / Twitter 画像レスポンスの共通生成
 - `app/lib/designTokens.ts`: TS 側で使う表示色トークン
+- `app/components/ForecastImageShareButton.tsx`: 指数カードの PNG 生成 / 共有
 
 ## `packages/core`
 

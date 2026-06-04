@@ -17,7 +17,7 @@
 ## UI
 
 - 色は `globals.css` の CSS variables を使う
-- OG / Twitter 画像など TS 側で色を使う場合は `app/lib/designTokens.ts` を使う
+- OG / Twitter 画像や Canvas 生成など TS 側で色を使う場合は `app/lib/designTokens.ts` を使う
 - カード半径、セクション間隔など共通化できる値は CSS variables に置く
 - 具体的な地点名、街灯、正確な緯度経度は UI に出さない
 

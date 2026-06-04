@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Forecast } from "../lib/forecast";
 import { formatHour, moonPhaseName } from "../lib/format";
+import { ForecastImageShareButton } from "./ForecastImageShareButton";
 import { DataItem, SectionHeading } from "./PageScaffold";
 
 type ForecastDashboardProps = {
@@ -30,11 +31,22 @@ export function ForecastDashboard({
             <p className="badge">{forecast.label}</p>
           </div>
 
-          {showAreaLink ? (
-            <Link className="area-select-link" href="/areas">
-              エリアを選ぶ
-            </Link>
-          ) : null}
+          <div className="forecast-actions">
+            {showAreaLink ? (
+              <Link className="area-select-link" href="/areas">
+                エリアを選ぶ
+              </Link>
+            ) : null}
+            <ForecastImageShareButton
+              areaName={forecast.area.name}
+              bestTime={forecast.bestTime}
+              date={forecast.date}
+              label={forecast.label}
+              probabilityBand={forecast.probabilityBand}
+              reasons={forecast.reasons}
+              score={forecast.score}
+            />
+          </div>
 
           <div className="score" aria-label={`夜虫指数 ${forecast.score}`}>
             <strong>{forecast.score}</strong>

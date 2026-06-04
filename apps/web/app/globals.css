@@ -438,6 +438,18 @@ h2 {
     transform var(--motion-fast) var(--ease-out);
 }
 
+.forecast-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.forecast-actions .area-select-link {
+  margin-top: 0;
+}
+
 .area-select-link-secondary {
   background: var(--surface-soft);
   color: var(--green);
@@ -451,6 +463,30 @@ h2 {
 }
 
 .area-select-link:active {
+  opacity: 0.9;
+  transform: translateY(1px);
+}
+
+.image-share-button {
+  background: var(--surface-soft);
+  border: 0;
+  border-radius: 999px;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 9px 18px;
+  transition:
+    opacity var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.image-share-button:hover {
+  transform: translateY(-1px);
+}
+
+.image-share-button:active {
   opacity: 0.9;
   transform: translateY(1px);
 }
