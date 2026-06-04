@@ -8,7 +8,7 @@ type ForecastDashboardProps = {
   showAreaLink?: boolean;
   showAreaName?: boolean;
 };
-const highlightScore = 70;
+const highlightScore = 90;
 
 export function ForecastDashboard({
   forecast,
