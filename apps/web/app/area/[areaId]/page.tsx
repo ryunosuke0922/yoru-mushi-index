@@ -11,7 +11,13 @@ import { ForecastShareButton } from "../../components/ForecastShareButton";
 import { PageIntro, PageScaffold } from "../../components/PageScaffold";
 import { buildWeeklyForecast } from "../../lib/forecast";
 import { todayKey } from "../../lib/format";
-import { absoluteUrl, createPageMetadata, jsonLd } from "../../lib/seo";
+import {
+  absoluteUrl,
+  createBreadcrumbJsonLd,
+  createPageMetadata,
+  jsonLd,
+  siteConfig,
+} from "../../lib/seo";
 
 type AreaPageProps = {
   params: Promise<{
@@ -73,30 +79,38 @@ export default async function AreaPage({ params }: AreaPageProps) {
 
   const pageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: `${area.name}の夜虫指数`,
-    url: absoluteUrl(`/area/${area.id}`),
-    description: `${area.name}の今夜の夜間昆虫の飛翔条件を、気象条件と月明かりから推定します。`,
-    inLanguage: "ja",
-    mainEntity: {
-      "@type": "Dataset",
-      name: `${area.name}の夜虫指数`,
-      description:
-        "夜間昆虫の飛翔条件を気象条件と月条件から推定したエリア単位の指数です。",
-      variableMeasured: [
-        "気温",
-        "湿度",
-        "風速",
-        "降水量",
-        "雲量",
-        "月照度",
-        "月相",
-      ],
-      spatialCoverage: {
-        "@type": "Place",
-        name: area.name,
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: `${area.name}の夜虫指数`,
+        url: absoluteUrl(`/area/${area.id}`),
+        description: `${area.name}の今夜の夜間昆虫の飛翔条件を、気象条件と月明かりから推定します。`,
+        inLanguage: "ja",
+        mainEntity: {
+          "@type": "Dataset",
+          name: `${area.name}の夜虫指数`,
+          description:
+            "夜間昆虫の飛翔条件を気象条件と月条件から推定したエリア単位の指数です。",
+          variableMeasured: [
+            "気温",
+            "湿度",
+            "風速",
+            "降水量",
+            "雲量",
+            "月照度",
+            "月相",
+          ],
+          spatialCoverage: {
+            "@type": "Place",
+            name: area.name,
+          },
+        },
       },
-    },
+      createBreadcrumbJsonLd([
+        { name: siteConfig.name, path: "/" },
+        { name: area.name, path: `/area/${area.id}` },
+      ]),
+    ],
   };
 
   return (

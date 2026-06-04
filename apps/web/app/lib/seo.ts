@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CoarseArea } from "@yoru-mushi-index/area";
 
 const defaultSiteUrl = "https://yoru-mushi-index.vercel.app";
 
@@ -37,6 +38,7 @@ type PageMetadataInput = {
   title?: string;
   description?: string;
   path?: string;
+  canonicalPath?: string;
   type?: "website" | "article";
   robots?: Metadata["robots"];
 };
@@ -45,6 +47,7 @@ export function createPageMetadata({
   title,
   description = siteConfig.description,
   path = "/",
+  canonicalPath = path,
   type = "website",
   robots,
 }: PageMetadataInput = {}): Metadata {
@@ -56,7 +59,7 @@ export function createPageMetadata({
     },
     description,
     alternates: {
-      canonical: path,
+      canonical: canonicalPath,
     },
     openGraph: {
       title: socialTitle,
@@ -79,4 +82,37 @@ export function createPageMetadata({
 
 export function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+export function createAreaItemListJsonLd(
+  areas: CoarseArea[],
+  name = "夜虫指数 対応エリア",
+) {
+  return {
+    "@type": "ItemList",
+    name,
+    itemListElement: areas.map((area, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: area.name,
+      url: absoluteUrl(`/area/${area.id}`),
+    })),
+  };
+}
+
+export function createBreadcrumbJsonLd(
+  items: Array<{
+    name: string;
+    path: string;
+  }>,
+) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
+  };
 }

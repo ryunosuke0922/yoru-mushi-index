@@ -3,7 +3,13 @@ import { areaFixtures } from "@yoru-mushi-index/area";
 import { AreaSelector } from "./components/AreaSelector";
 import { PageIntro } from "./components/PageScaffold";
 import { PageScaffold } from "./components/PageScaffold";
-import { absoluteUrl, createPageMetadata, jsonLd, siteConfig } from "./lib/seo";
+import {
+  absoluteUrl,
+  createAreaItemListJsonLd,
+  createPageMetadata,
+  jsonLd,
+  siteConfig,
+} from "./lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
   description:
@@ -16,18 +22,10 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: siteConfig.name,
+    url: absoluteUrl("/"),
     description: siteConfig.description,
     inLanguage: "ja",
-    mainEntity: {
-      "@type": "ItemList",
-      name: "夜虫指数 対応エリア",
-      itemListElement: areaFixtures.map((area, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: area.name,
-        url: absoluteUrl(`/area/${area.id}`),
-      })),
-    },
+    mainEntity: createAreaItemListJsonLd(areaFixtures),
   };
 
   return (
