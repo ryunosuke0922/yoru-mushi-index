@@ -444,11 +444,6 @@ h2 {
     transform var(--motion-fast) var(--ease-out);
 }
 
-.forecast-share-button {
-  background: var(--green);
-  color: var(--surface);
-}
-
 .forecast-share-button:hover,
 .image-share-button:hover {
   transform: translateY(-1px);
@@ -458,6 +453,15 @@ h2 {
 .image-share-button:active {
   opacity: 0.9;
   transform: translateY(1px);
+}
+
+.page-intro-actions .forecast-share-button,
+.page-intro-actions .image-share-button,
+.page-intro-actions .area-select-link-secondary {
+  background: var(--surface-soft);
+  color: var(--green);
+  min-height: 36px;
+  padding: 8px 14px;
 }
 
 .score {
