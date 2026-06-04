@@ -100,7 +100,7 @@ input:focus-visible {
   color: var(--muted);
   display: flex;
   font-size: 0.76rem;
-  font-weight: 700;
+  font-weight: 600;
   gap: 22px;
 }
 
@@ -167,14 +167,14 @@ input:focus-visible {
 .document-page p {
   color: var(--muted);
   font-size: 0.86rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.7;
 }
 
 .area-aliases {
   color: var(--accent);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 650;
   line-height: 1.6;
   margin: 0 0 6px;
 }
@@ -192,7 +192,7 @@ input:focus-visible {
   display: grid;
   gap: 8px;
   font-size: 0.86rem;
-  font-weight: 650;
+  font-weight: 500;
   line-height: 1.7;
   margin: 10px 0 0;
   padding-left: 1.55em;
@@ -534,13 +534,13 @@ h2 {
 .forecast-meta small {
   color: var(--muted);
   font-size: 0.68rem;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .forecast-meta strong {
   color: var(--text);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .reasons {
@@ -566,7 +566,7 @@ h2 {
 .reason span:last-child {
   color: var(--text);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.38;
 }
 
@@ -653,14 +653,14 @@ h2 {
 .taxon span {
   color: var(--text);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .hour strong,
 .taxon strong {
   color: var(--green);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .hour-highlight,
@@ -772,7 +772,7 @@ h2 {
 .daily-card small {
   color: var(--muted);
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .daily-card small {
@@ -809,7 +809,7 @@ h2 {
 .daily-card p {
   color: var(--text);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .daily-card-highlight p {
@@ -828,13 +828,13 @@ h2 {
 .data-item span {
   color: var(--muted);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .data-item strong {
   color: var(--text);
   font-size: 0.92rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
 }
 
