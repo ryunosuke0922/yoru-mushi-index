@@ -6,6 +6,8 @@ import {
   ForecastDashboard,
   WeeklyForecastList,
 } from "../../components/ForecastDashboard";
+import { ForecastImageShareButton } from "../../components/ForecastImageShareButton";
+import { ForecastShareButton } from "../../components/ForecastShareButton";
 import { PageIntro, PageScaffold } from "../../components/PageScaffold";
 import { buildWeeklyForecast } from "../../lib/forecast";
 import { todayKey } from "../../lib/format";
@@ -60,6 +62,15 @@ export default async function AreaPage({ params }: AreaPageProps) {
     notFound();
   }
 
+  const shareUrl = absoluteUrl(`/area/${area.id}`);
+  const shareText = [
+    `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
+    current.bestTime ? `おすすめ時間は ${current.bestTime}。` : null,
+    `見込みは ${current.probabilityBand}。`,
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
+
   const pageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -96,12 +107,29 @@ export default async function AreaPage({ params }: AreaPageProps) {
       />
       <PageIntro
         action={
-          <Link
-            className="area-select-link area-select-link-secondary"
-            href="/areas"
-          >
-            エリアを選ぶ
-          </Link>
+          <div className="page-intro-actions">
+            <ForecastShareButton
+              text={shareText}
+              title={`${current.area.name}の夜虫指数は ${current.score}`}
+              url={shareUrl}
+            />
+            <ForecastImageShareButton
+              areaName={current.area.name}
+              bestTime={current.bestTime}
+              date={current.date}
+              label={current.label}
+              probabilityBand={current.probabilityBand}
+              reasons={current.reasons}
+              score={current.score}
+              url={shareUrl}
+            />
+            <Link
+              className="area-select-link area-select-link-secondary"
+              href="/areas"
+            >
+              エリアを選ぶ
+            </Link>
+          </div>
         }
         kicker="AREA FORECAST"
         title={area.name}
@@ -112,7 +140,6 @@ export default async function AreaPage({ params }: AreaPageProps) {
 
       <ForecastDashboard
         forecast={current}
-        shareUrl={absoluteUrl(`/area/${area.id}`)}
         showAreaLink={false}
         showAreaName={false}
       />

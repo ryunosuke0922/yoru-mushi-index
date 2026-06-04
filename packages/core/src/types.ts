@@ -21,6 +21,13 @@ export type AreaCondition = {
 
 export type ScoreLabel = "とても低い" | "低い" | "普通" | "高い" | "とても高い";
 
+export type ScoreReasonTone = "positive" | "negative" | "neutral";
+
+export type ScoreReason = {
+  text: string;
+  tone: ScoreReasonTone;
+};
+
 export type TaxaScores = {
   moths: number;
   beetles: number;

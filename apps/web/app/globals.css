@@ -11,6 +11,7 @@
   --green-border-hover: rgba(35, 76, 61, 0.16);
   --green-track: rgba(35, 76, 61, 0.16);
   --accent: #5f8172;
+  --negative: #8b5a49;
   --font-sans: "Hiragino Sans", "Yu Gothic", "YuGothic", Arial, sans-serif;
   --radius-card: 28px;
   --radius-panel: 24px;
@@ -152,6 +153,14 @@ input:focus-visible {
 
 .page-intro-action {
   flex: 0 0 auto;
+}
+
+.page-intro-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: flex-end;
 }
 
 .page-intro p:last-child,
@@ -514,14 +523,14 @@ h2 {
 
 .reasons {
   display: grid;
-  gap: 12px;
+  gap: 9px;
 }
 
 .reason {
   align-items: center;
   display: flex;
-  gap: 10px;
-  min-height: 30px;
+  gap: 9px;
+  min-height: 26px;
 }
 
 .dot {
@@ -534,9 +543,27 @@ h2 {
 
 .reason span:last-child {
   color: var(--text);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.38;
+}
+
+.reason-positive .dot,
+.reason-neutral .dot {
+  background: var(--green);
+}
+
+.reason-positive span:last-child,
+.reason-neutral span:last-child {
+  color: var(--green);
+}
+
+.reason-negative .dot {
+  background: var(--negative);
+}
+
+.reason-negative span:last-child {
+  color: var(--negative);
 }
 
 .content-grid {
@@ -857,6 +884,10 @@ h2 {
   .page-intro-heading {
     flex-direction: column;
     gap: 14px;
+  }
+
+  .page-intro-actions {
+    justify-content: flex-start;
   }
 
   .forecast-card,

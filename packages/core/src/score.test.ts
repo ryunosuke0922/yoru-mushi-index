@@ -78,7 +78,10 @@ describe("scoreReasons", () => {
           recentRainMm24h: 0,
         },
       ),
-    ).toContain("月明かりの影響はほぼありません");
+    ).toContainEqual({
+      text: "月明かりの影響はほぼありません",
+      tone: "positive",
+    });
   });
 });
 

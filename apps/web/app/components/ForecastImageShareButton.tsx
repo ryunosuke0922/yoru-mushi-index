@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ScoreReason } from "@yoru-mushi-index/core";
 import { colors } from "../lib/designTokens";
 
 type ForecastImageShareButtonProps = {
@@ -9,7 +10,7 @@ type ForecastImageShareButtonProps = {
   date: string;
   label: string;
   probabilityBand: string;
-  reasons: string[];
+  reasons: ScoreReason[];
   score: number;
   url: string;
 };
@@ -155,14 +156,16 @@ async function createForecastImage({
 
   context.fillStyle = colors.text;
   context.font = font(800, 28);
-  reasons.slice(0, 4).forEach((reason, index) => {
-    const y = 172 + index * 66;
-    context.fillStyle = colors.green;
+  reasons.slice(0, 5).forEach((reason, index) => {
+    const y = 166 + index * 54;
+    const reasonColor =
+      reason.tone === "negative" ? colors.negative : colors.green;
+    context.fillStyle = reasonColor;
     context.beginPath();
     context.arc(layout.rightX + 8, y - 8, 4, 0, Math.PI * 2);
     context.fill();
-    context.fillStyle = colors.text;
-    drawWrappedText(context, reason, layout.rightX + 28, y, 330, 34);
+    context.fillStyle = reasonColor;
+    drawWrappedText(context, reason.text, layout.rightX + 28, y, 330, 30);
   });
 
   context.fillStyle = colors.accent;

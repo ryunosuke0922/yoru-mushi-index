@@ -7,4 +7,5 @@ export const colors = {
   surfaceSoft: "#eef1eb",
   green: "#234c3d",
   accent: "#5f8172",
+  negative: "#8b5a49",
 } as const;

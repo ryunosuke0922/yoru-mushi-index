@@ -1,31 +1,20 @@
 import Link from "next/link";
 import type { Forecast } from "../lib/forecast";
 import { formatHour, moonPhaseName } from "../lib/format";
-import { ForecastImageShareButton } from "./ForecastImageShareButton";
-import { ForecastShareButton } from "./ForecastShareButton";
 import { DataItem, SectionHeading } from "./PageScaffold";
 
 type ForecastDashboardProps = {
   forecast: Forecast;
-  shareUrl: string;
   showAreaLink?: boolean;
   showAreaName?: boolean;
 };
 
 export function ForecastDashboard({
   forecast,
-  shareUrl,
   showAreaLink = true,
   showAreaName = true,
 }: ForecastDashboardProps) {
   const condition = forecast.condition;
-  const shareText = [
-    `${forecast.area.name}の夜虫指数は ${forecast.score} / 100（${forecast.label}）です。`,
-    forecast.bestTime ? `おすすめ時間は ${forecast.bestTime}。` : null,
-    `見込みは ${forecast.probabilityBand}。`,
-  ]
-    .filter((line): line is string => line !== null)
-    .join("\n");
 
   return (
     <>
@@ -41,28 +30,13 @@ export function ForecastDashboard({
             <p className="badge">{forecast.label}</p>
           </div>
 
-          <div className="forecast-actions">
-            {showAreaLink ? (
+          {showAreaLink ? (
+            <div className="forecast-actions">
               <Link className="area-select-link" href="/areas">
                 エリアを選ぶ
               </Link>
-            ) : null}
-            <ForecastShareButton
-              text={shareText}
-              title={`${forecast.area.name}の夜虫指数は ${forecast.score}`}
-              url={shareUrl}
-            />
-            <ForecastImageShareButton
-              areaName={forecast.area.name}
-              bestTime={forecast.bestTime}
-              date={forecast.date}
-              label={forecast.label}
-              probabilityBand={forecast.probabilityBand}
-              reasons={forecast.reasons}
-              score={forecast.score}
-              url={shareUrl}
-            />
-          </div>
+            </div>
+          ) : null}
 
           <div className="score" aria-label={`夜虫指数 ${forecast.score}`}>
             <strong>{forecast.score}</strong>
@@ -91,9 +65,9 @@ export function ForecastDashboard({
           <p className="section-kicker">REASON</p>
           <div className="reasons">
             {forecast.reasons.map((reason) => (
-              <div className="reason" key={reason}>
+              <div className={`reason reason-${reason.tone}`} key={reason.text}>
                 <span className="dot" />
-                <span>{reason}</span>
+                <span>{reason.text}</span>
               </div>
             ))}
           </div>

@@ -9,6 +9,8 @@ export type {
   AreaCondition,
   HourlyScore,
   MoonCondition,
+  ScoreReason,
+  ScoreReasonTone,
   ScoreLabel,
   TaxaScores,
   WeatherHour,
