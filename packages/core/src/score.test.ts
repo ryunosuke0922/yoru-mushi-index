@@ -83,6 +83,38 @@ describe("scoreReasons", () => {
       tone: "positive",
     });
   });
+
+  it("中間条件の抑制要因も返す", () => {
+    expect(
+      scoreReasons(
+        {
+          time: "2026-06-04T20:00:00+09:00",
+          temperature: 19,
+          humidity: 58,
+          precipitation: 0,
+          windSpeed: 4.5,
+          windGust: 8,
+          cloudCover: 80,
+        },
+        {
+          illumination: 0.4,
+          altitudeDeg: 12,
+        },
+        {
+          seasonScore: 0.8,
+          habitatScore: 0.8,
+          recentRainMm24h: 0,
+        },
+      ),
+    ).toEqual(
+      expect.arrayContaining([
+        { text: "気温はやや低めです", tone: "negative" },
+        { text: "風がやや強めです", tone: "negative" },
+        { text: "直近の雨量は少なめです", tone: "negative" },
+        { text: "湿度はやや低めです", tone: "negative" },
+      ]),
+    );
+  });
 });
 
 describe("score labels", () => {
