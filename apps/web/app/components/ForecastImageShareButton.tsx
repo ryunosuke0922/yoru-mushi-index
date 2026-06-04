@@ -117,7 +117,7 @@ async function createForecastImage({
 
   context.fillStyle = colors.muted;
   context.font = font(800, 28);
-  context.fillText("/ 100", scoreText.length >= 3 ? 406 : 300, 322);
+  context.fillText("/ 100", scoreText.length >= 3 ? 500 : 390, 322);
 
   const chips = [
     { key: "日付", value: date, width: 306, x: layout.leftX, y: 404 },
