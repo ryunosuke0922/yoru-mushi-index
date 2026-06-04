@@ -60,13 +60,6 @@ export default function DataSourcesPage() {
           は表示継続用で、精度評価には使いません。Open-Meteo の障害、API
           の利用上限、ネットワークエラーが発生している間は、実際の気象予報に基づく指数として正しく動作しない可能性があります。
         </p>
-
-        <h2>公開しない情報</h2>
-        <ul>
-          <li>正確な緯度経度</li>
-          <li>具体的な観察地点、街灯、採集地、生息地</li>
-          <li>細かい地点名に紐づく生物ポイント</li>
-        </ul>
       </DocumentPage>
     </PageScaffold>
   );

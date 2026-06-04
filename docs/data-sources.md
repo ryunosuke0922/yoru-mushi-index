@@ -53,8 +53,6 @@
 - `precisionKm`
 - `locationPolicy`
 
-公開 API と画面では、正確な緯度経度、具体的な観察地点、街灯、採集地、生息地を表示しません。
-
 ## Fallback
 
 Open-Meteo が失敗した場合でも画面と API が落ちないように、アプリ内の fallback weather を使います。fallback は MVP の表示継続用であり、精度評価には使いません。
