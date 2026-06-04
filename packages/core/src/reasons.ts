@@ -35,8 +35,10 @@ export function scoreReasons(
     weather.cloudCover < 40
   ) {
     reasons.push("月明かりの影響が大きめです");
-  } else {
+  } else if (moon.altitudeDeg > 0) {
     reasons.push("月明かりの影響が小さめです");
+  } else {
+    reasons.push("月明かりの影響はほぼありません");
   }
 
   return reasons;

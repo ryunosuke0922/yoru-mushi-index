@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { probabilityBand, scoreLabel } from "./labels";
+import { scoreReasons } from "./reasons";
 import { calculateNightInsectScore } from "./score";
 
 describe("calculateNightInsectScore", () => {
@@ -51,6 +52,33 @@ describe("calculateNightInsectScore", () => {
     );
 
     expect(score).toBeLessThanOrEqual(40);
+  });
+});
+
+describe("scoreReasons", () => {
+  it("月が地平線下なら月明かりの影響なしとして返す", () => {
+    expect(
+      scoreReasons(
+        {
+          time: "2026-06-04T20:00:00+09:00",
+          temperature: 22,
+          humidity: 68,
+          precipitation: 0,
+          windSpeed: 2,
+          windGust: 4,
+          cloudCover: 10,
+        },
+        {
+          illumination: 0.9,
+          altitudeDeg: -20,
+        },
+        {
+          seasonScore: 0.8,
+          habitatScore: 0.8,
+          recentRainMm24h: 0,
+        },
+      ),
+    ).toContain("月明かりの影響はほぼありません");
   });
 });
 

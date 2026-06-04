@@ -13,7 +13,7 @@ const weatherHour = (time: string, precipitation: number): WeatherHour => ({
 });
 
 describe("recentRainMm24h", () => {
-  it("基準時刻から直近 24 時間の雨量だけを合算する", () => {
+  it("基準時刻より前の直近 24 時間の雨量だけを合算する", () => {
     const hours = [
       weatherHour("2026-06-04T18:00", 9),
       weatherHour("2026-06-04T20:00", 2),
@@ -21,6 +21,6 @@ describe("recentRainMm24h", () => {
       weatherHour("2026-06-05T23:00", 8),
     ];
 
-    expect(recentRainMm24h(hours, "2026-06-05T19:00")).toBe(3);
+    expect(recentRainMm24h(hours, "2026-06-05T19:00")).toBe(2);
   });
 });

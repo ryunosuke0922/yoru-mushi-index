@@ -25,7 +25,7 @@ export function recentRainMm24h(
   return hours
     .filter((hour) => {
       const hourMs = new Date(hour.time).getTime();
-      return hourMs > startMs && hourMs <= referenceMs;
+      return hourMs > startMs && hourMs < referenceMs;
     })
     .reduce((total, hour) => total + hour.precipitation, 0);
 }

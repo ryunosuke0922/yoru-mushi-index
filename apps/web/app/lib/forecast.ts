@@ -129,15 +129,22 @@ function buildHourlyScores(
     });
 }
 
-function findBestHour(hourly: HourlyScore[]) {
+function findBestHour(hourly: HourlyScore[]): HourlyScore | undefined {
+  if (hourly.length === 0) {
+    return undefined;
+  }
+
   return hourly.reduce(
     (best, current) => (current.score > best.score ? current : best),
-    hourly[0],
+    hourly[0]!,
   );
 }
 
 function formatBestTime(bestHour: HourlyScore) {
-  return `${bestHour.time.slice(11, 16)}-${String(Number(bestHour.time.slice(11, 13)) + 1).padStart(2, "0")}:00`;
+  const startHour = Number(bestHour.time.slice(11, 13));
+  const endHour = (startHour + 1) % 24;
+
+  return `${bestHour.time.slice(11, 16)}-${String(endHour).padStart(2, "0")}:00`;
 }
 
 function toForecastCondition(bestHour: HourlyScore) {
@@ -171,7 +178,8 @@ async function fetchWeatherHours(
     });
 
     return normalizeWeatherHours(forecast);
-  } catch {
+  } catch (error) {
+    console.warn("Failed to fetch Open-Meteo forecast. Using fallback.", error);
     return fallbackWeatherHours(date);
   }
 }
