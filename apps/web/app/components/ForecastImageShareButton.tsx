@@ -19,6 +19,11 @@ const imageSize = {
   width: 1200,
   height: 630,
 };
+const layout = {
+  leftX: 96,
+  rightX: 724,
+  dividerX: 668,
+};
 
 export function ForecastImageShareButton({
   areaName,
@@ -96,46 +101,57 @@ async function createForecastImage({
 
   context.fillStyle = colors.accent;
   context.font = font(800, 24);
-  context.fillText("AREA", 96, 118);
+  context.fillText("AREA", layout.leftX, 118);
 
   context.fillStyle = colors.text;
   context.font = font(800, 40);
-  context.fillText(areaName, 96, 168);
+  context.fillText(areaName, layout.leftX, 168);
 
-  pill(context, label, 920, 92, 116, 42);
+  pill(context, label, 502, 92, 116, 42);
 
   context.fillStyle = colors.green;
   context.font = font(800, 154);
-  context.fillText(String(score), 96, 342);
+  const scoreText = String(score);
+  context.fillText(scoreText, layout.leftX, 342);
 
   context.fillStyle = colors.muted;
   context.font = font(800, 28);
-  context.fillText("/ 100", 282, 322);
+  context.fillText(
+    "/ 100",
+    layout.leftX + context.measureText(scoreText).width + 18,
+    322,
+  );
 
   const chips = [
-    ["日付", date],
-    ["おすすめ", bestTime ?? "-"],
-    ["見込み", probabilityBand],
+    { key: "日付", value: date, width: 306, x: layout.leftX, y: 404 },
+    {
+      key: "見込み",
+      value: probabilityBand,
+      width: 206,
+      x: layout.leftX + 320,
+      y: 404,
+    },
+    {
+      key: "おすすめ",
+      value: bestTime ?? "-",
+      width: 306,
+      x: layout.leftX,
+      y: 454,
+    },
   ];
-  let chipX = 96;
-  for (const [key, value] of chips) {
-    const width = Math.max(
-      146,
-      context.measureText(`${key} ${value}`).width + 44,
-    );
-    metaChip(context, key, value, chipX, 404, width);
-    chipX += width + 14;
-  }
+  chips.forEach((chip) =>
+    metaChip(context, chip.key, chip.value, chip.x, chip.y, chip.width),
+  );
 
   context.strokeStyle = colors.border;
   context.beginPath();
-  context.moveTo(668, 96);
-  context.lineTo(668, 520);
+  context.moveTo(layout.dividerX, 96);
+  context.lineTo(layout.dividerX, 520);
   context.stroke();
 
   context.fillStyle = colors.accent;
   context.font = font(800, 24);
-  context.fillText("REASON", 724, 118);
+  context.fillText("REASON", layout.rightX, 118);
 
   context.fillStyle = colors.text;
   context.font = font(800, 28);
@@ -143,15 +159,15 @@ async function createForecastImage({
     const y = 172 + index * 66;
     context.fillStyle = colors.green;
     context.beginPath();
-    context.arc(732, y - 8, 4, 0, Math.PI * 2);
+    context.arc(layout.rightX + 8, y - 8, 4, 0, Math.PI * 2);
     context.fill();
     context.fillStyle = colors.text;
-    drawWrappedText(context, reason, 752, y, 300, 34);
+    drawWrappedText(context, reason, layout.rightX + 28, y, 330, 34);
   });
 
   context.fillStyle = colors.accent;
   context.font = font(800, 22);
-  context.fillText("yoru-mushi-index", 96, 526);
+  context.fillText("yoru-mushi-index", layout.leftX, 526);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((value) => {
@@ -204,7 +220,7 @@ function metaChip(
   context.fillText(key, x + 18, y + 27);
   context.fillStyle = colors.text;
   context.font = font(800, 22);
-  context.fillText(value, x + 66, y + 28);
+  context.fillText(value, x + 18 + context.measureText(key).width + 16, y + 28);
 }
 
 function drawWrappedText(
