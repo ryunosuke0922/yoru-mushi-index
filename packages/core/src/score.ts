@@ -29,20 +29,20 @@ export function calculateTaxaScores(
   weather: WeatherHour,
   area: AreaCondition,
 ): TaxaScores {
+  const mothHabitatBoost = area.habitatScore * 8;
+  const beetleTemperatureBoost = temperatureScore(weather.temperature) * 0.4;
+  const aquaticRainBoost = Math.min(area.recentRainMm24h, 12) * 1.2;
+  const aquaticHabitatBoost = area.habitatScore * 4;
+
   return {
-    moths: clamp(Math.round(totalScore + area.habitatScore * 8), 0, 100),
+    moths: clamp(Math.round(totalScore + mothHabitatBoost), 0, 100),
     beetles: clamp(
-      Math.round(totalScore - 12 + temperatureScore(weather.temperature) * 0.4),
+      Math.round(totalScore - 12 + beetleTemperatureBoost),
       0,
       100,
     ),
     aquaticInsects: clamp(
-      Math.round(
-        totalScore -
-          4 +
-          Math.min(area.recentRainMm24h, 12) * 1.2 +
-          area.habitatScore * 4,
-      ),
+      Math.round(totalScore - 4 + aquaticRainBoost + aquaticHabitatBoost),
       0,
       100,
     ),

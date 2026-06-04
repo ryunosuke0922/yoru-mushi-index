@@ -4,16 +4,14 @@ import { groupAreasByRegionAndPrefecture } from "@yoru-mushi-index/area";
 export function AreaSelector() {
   const groupedAreas = groupAreasByRegionAndPrefecture();
   const regionEntries = Object.entries(groupedAreas).map(
-    ([region, prefectures], regionIndex) => ({
-      id: `region-${regionIndex + 1}`,
+    ([region, prefectures]) => ({
+      id: toAnchorId(region),
       name: region,
-      prefectures: Object.entries(prefectures).map(
-        ([prefecture, areas], prefectureIndex) => ({
-          id: `prefecture-${regionIndex + 1}-${prefectureIndex + 1}`,
-          name: prefecture,
-          areas,
-        }),
-      ),
+      prefectures: Object.entries(prefectures).map(([prefecture, areas]) => ({
+        id: toAnchorId(`${region}-${prefecture}`),
+        name: prefecture,
+        areas,
+      })),
     }),
   );
 
@@ -67,4 +65,8 @@ export function AreaSelector() {
       </div>
     </>
   );
+}
+
+function toAnchorId(value: string) {
+  return encodeURIComponent(value);
 }

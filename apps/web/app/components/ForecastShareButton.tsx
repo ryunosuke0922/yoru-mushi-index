@@ -13,7 +13,7 @@ export function ForecastShareButton({
   title,
   url,
 }: ForecastShareButtonProps) {
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
 
   async function handleClick() {
     if (navigator.share) {
@@ -29,9 +29,14 @@ export function ForecastShareButton({
       }
     }
 
-    await navigator.clipboard.writeText(`${text}\n${url}`);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      setStatus("copied");
+    } catch {
+      setStatus("failed");
+    }
+
+    window.setTimeout(() => setStatus("idle"), 1800);
   }
 
   return (
@@ -40,7 +45,11 @@ export function ForecastShareButton({
       onClick={handleClick}
       type="button"
     >
-      {copied ? "コピー済み" : "共有"}
+      {status === "copied"
+        ? "コピー済み"
+        : status === "failed"
+          ? "コピー不可"
+          : "共有"}
     </button>
   );
 }

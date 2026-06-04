@@ -40,7 +40,7 @@ export function buildHourlyScores(
     )
     .map((weather) => {
       const moon = moonConditionAt(
-        new Date(weather.time),
+        jstDateFromOpenMeteoTime(weather.time),
         area.latitude,
         area.longitude,
       );
@@ -112,4 +112,8 @@ export function fallbackWeatherHours(date: string): WeatherHour[] {
       cloudCover: 72,
     })),
   );
+}
+
+export function jstDateFromOpenMeteoTime(time: string) {
+  return new Date(`${time}+09:00`);
 }

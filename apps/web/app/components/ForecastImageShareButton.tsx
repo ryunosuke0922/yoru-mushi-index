@@ -53,11 +53,15 @@ export function ForecastImageShareButton({
     });
 
     if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。\n${url}`,
-        title: "夜虫指数",
-      });
+      try {
+        await navigator.share({
+          files: [file],
+          text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。\n${url}`,
+          title: "夜虫指数",
+        });
+      } catch {
+        // Native share can be cancelled by the user.
+      }
     } else {
       downloadBlob(blob, file.name);
     }

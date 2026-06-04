@@ -6,6 +6,7 @@ import {
   fallbackWeatherHours,
   findBestHour,
   formatBestTime,
+  jstDateFromOpenMeteoTime,
   toForecastCondition,
 } from "./forecastScoring";
 
@@ -67,6 +68,12 @@ describe("forecastScoring", () => {
       "2026-06-05T23:00",
     ]);
     expect(hourly[0]?.recentRainMm24h).toBe(3);
+  });
+
+  it("Open-Meteo の offset なし JST 文字列を JST として解釈する", () => {
+    expect(jstDateFromOpenMeteoTime("2026-06-05T19:00").toISOString()).toBe(
+      "2026-06-05T10:00:00.000Z",
+    );
   });
 
   it("最高スコアの時間、表示時間、取得条件を返す", () => {
