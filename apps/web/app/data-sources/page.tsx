@@ -57,7 +57,8 @@ export default function DataSourcesPage() {
         <p>
           Open-Meteo の取得に失敗した場合は、画面と API
           を落とさないためにアプリ内の fallback weather を使用します。fallback
-          は表示継続用で、精度評価には使いません。
+          は表示継続用で、精度評価には使いません。Open-Meteo の障害、API
+          の利用上限、ネットワークエラーが発生している間は、実際の気象予報に基づく指数として正しく動作しない可能性があります。
         </p>
 
         <h2>公開しない情報</h2>
