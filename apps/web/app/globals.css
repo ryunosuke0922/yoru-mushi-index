@@ -421,6 +421,7 @@ h2 {
   transform: translateY(1px);
 }
 
+.forecast-share-button,
 .image-share-button {
   background: var(--surface-soft);
   border: 0;
@@ -436,10 +437,17 @@ h2 {
     transform var(--motion-fast) var(--ease-out);
 }
 
+.forecast-share-button {
+  background: var(--green);
+  color: var(--surface);
+}
+
+.forecast-share-button:hover,
 .image-share-button:hover {
   transform: translateY(-1px);
 }
 
+.forecast-share-button:active,
 .image-share-button:active {
   opacity: 0.9;
   transform: translateY(1px);

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Forecast } from "../lib/forecast";
 import { formatHour, moonPhaseName } from "../lib/format";
 import { ForecastImageShareButton } from "./ForecastImageShareButton";
+import { ForecastShareButton } from "./ForecastShareButton";
 import { DataItem, SectionHeading } from "./PageScaffold";
 
 type ForecastDashboardProps = {
@@ -18,6 +19,13 @@ export function ForecastDashboard({
   showAreaName = true,
 }: ForecastDashboardProps) {
   const condition = forecast.condition;
+  const shareText = [
+    `${forecast.area.name}の夜虫指数は ${forecast.score} / 100（${forecast.label}）です。`,
+    forecast.bestTime ? `おすすめ時間は ${forecast.bestTime}。` : null,
+    `見込みは ${forecast.probabilityBand}。`,
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
 
   return (
     <>
@@ -39,6 +47,11 @@ export function ForecastDashboard({
                 エリアを選ぶ
               </Link>
             ) : null}
+            <ForecastShareButton
+              text={shareText}
+              title={`${forecast.area.name}の夜虫指数は ${forecast.score}`}
+              url={shareUrl}
+            />
             <ForecastImageShareButton
               areaName={forecast.area.name}
               bestTime={forecast.bestTime}
