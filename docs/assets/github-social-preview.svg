@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <rect width="1280" height="640" fill="#f6f7f3" />
+  <rect x="56" y="56" width="1168" height="528" rx="44" fill="#ffffff" stroke="#d8ded4" stroke-width="2" />
+  <g transform="translate(104 128)">
+    <rect width="148" height="148" rx="34" fill="#184838" />
+    <path
+      fill="#f6f7f3"
+      d="M74 39c6 0 11 7 11 17v39c0 10-5 18-11 18s-11-8-11-18V56c0-10 5-17 11-17Z"
+    />
+    <path
+      fill="#f6f7f3"
+      d="M60 55c-17-17-39-17-48-4-9 13 0 38 28 52 13 7 24 6 29-1-9-7-13-18-13-33 0-6 1-11 4-14Z"
+    />
+    <path
+      fill="#f6f7f3"
+      d="M88 55c17-17 39-17 48-4 9 13 0 38-28 52-13 7-24 6-29-1 9-7 13-18 13-33 0-6-1-11-4-14Z"
+    />
+    <path
+      fill="none"
+      stroke="#f6f7f3"
+      stroke-linecap="round"
+      stroke-width="7"
+      d="M68 44c-8-14-18-21-30-23M80 44c8-14 18-21 30-23"
+    />
+    <circle cx="68" cy="62" r="3" fill="#184838" />
+    <circle cx="80" cy="62" r="3" fill="#184838" />
+  </g>
+  <text
+    x="292"
+    y="220"
+    fill="#184838"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="112"
+    font-weight="850"
+  >
+    夜虫指数
+  </text>
+  <text
+    x="300"
+    y="300"
+    fill="#5f8172"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="36"
+    font-weight="800"
+    letter-spacing="5"
+  >
+    YORU-MUSHI-INDEX
+  </text>
+  <text
+    x="108"
+    y="420"
+    fill="#26312d"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="42"
+    font-weight="700"
+  >
+    気象条件と月明かりから、夜間昆虫の飛翔条件を推定
+  </text>
+  <text
+    x="108"
+    y="514"
+    fill="#5f8172"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="46"
+    font-weight="800"
+  >
+    yorumushi.com
+  </text>
+</svg>
