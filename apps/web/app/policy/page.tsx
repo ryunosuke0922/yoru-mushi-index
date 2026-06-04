@@ -7,6 +7,10 @@ export const metadata: Metadata = createPageMetadata({
   description:
     "夜虫指数で具体的な観察地点、街灯、採集地、生息地を表示しない方針を説明します。",
   path: "/policy",
+  robots: {
+    index: false,
+    follow: true,
+  },
 });
 
 export default function PolicyPage() {
