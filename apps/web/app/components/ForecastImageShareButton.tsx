@@ -117,11 +117,7 @@ async function createForecastImage({
 
   context.fillStyle = colors.muted;
   context.font = font(800, 28);
-  context.fillText(
-    "/ 100",
-    layout.leftX + context.measureText(scoreText).width + 18,
-    322,
-  );
+  context.fillText("/ 100", scoreText.length >= 3 ? 406 : 300, 322);
 
   const chips = [
     { key: "日付", value: date, width: 306, x: layout.leftX, y: 404 },
@@ -167,10 +163,6 @@ async function createForecastImage({
     context.fillStyle = reasonColor;
     drawWrappedText(context, reason.text, layout.rightX + 28, y, 330, 30);
   });
-
-  context.fillStyle = colors.accent;
-  context.font = font(800, 22);
-  context.fillText("yoru-mushi-index", layout.leftX, 526);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((value) => {
