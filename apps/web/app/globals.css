@@ -430,8 +430,8 @@ h2 {
 }
 
 .area-select-link-secondary {
-  background: var(--surface-soft);
-  color: var(--green);
+  background: var(--green);
+  color: var(--surface);
   margin-top: 0;
   min-height: 36px;
   padding: 8px 14px;
@@ -480,6 +480,11 @@ h2 {
   color: var(--green);
   min-height: 36px;
   padding: 8px 14px;
+}
+
+.page-intro-actions .area-select-link-secondary {
+  background: var(--green);
+  color: var(--surface);
 }
 
 .score {
