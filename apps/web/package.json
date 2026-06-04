@@ -1,0 +1,28 @@
+{
+  "name": "@yoru-mushi-index/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yoru-mushi-index/area": "workspace:*",
+    "@yoru-mushi-index/astro": "workspace:*",
+    "@yoru-mushi-index/core": "workspace:*",
+    "@yoru-mushi-index/weather": "workspace:*",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
+  }
+}

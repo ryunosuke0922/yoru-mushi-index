@@ -1,0 +1,15 @@
+.DS_Store
+.idea/
+.vscode/
+*.log
+.env
+.env*.local
+.next
+.cache
+coverage
+dist
+node_modules
+*.tsbuildinfo
+test-results
+playwright-report
+tmp
