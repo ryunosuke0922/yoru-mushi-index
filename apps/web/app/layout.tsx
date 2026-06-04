@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { GoogleAnalytics } from "./components/GoogleAnalytics";
 import { absoluteUrl, jsonLd, siteConfig, socialImage } from "./lib/seo";
 
 export const metadata: Metadata = {
@@ -83,6 +84,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd) }}
         />
         {children}
+        <GoogleAnalytics
+          measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
+        />
       </body>
     </html>
   );

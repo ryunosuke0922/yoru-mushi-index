@@ -84,9 +84,11 @@ make dev
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://yorumushi.com
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 `NEXT_PUBLIC_SITE_URL` is used for canonical URLs, Open Graph URLs, robots.txt, and sitemap.xml.
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` enables Google Analytics when set.
 
 ## CI
 
