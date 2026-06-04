@@ -11,7 +11,9 @@ type ForecastImageShareButtonProps = {
   probabilityBand: string;
   reasons: string[];
   score: number;
+  url: string;
 };
+type ForecastImageInput = Omit<ForecastImageShareButtonProps, "url">;
 
 const imageSize = {
   width: 1200,
@@ -26,6 +28,7 @@ export function ForecastImageShareButton({
   probabilityBand,
   reasons,
   score,
+  url,
 }: ForecastImageShareButtonProps) {
   const [status, setStatus] = useState<"idle" | "done">("idle");
 
@@ -46,7 +49,7 @@ export function ForecastImageShareButton({
     if (navigator.canShare?.({ files: [file] })) {
       await navigator.share({
         files: [file],
-        text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。`,
+        text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。\n${url}`,
         title: "夜虫指数",
       });
     } else {
@@ -72,7 +75,7 @@ async function createForecastImage({
   probabilityBand,
   reasons,
   score,
-}: ForecastImageShareButtonProps) {
+}: ForecastImageInput) {
   const canvas = document.createElement("canvas");
   canvas.width = imageSize.width;
   canvas.height = imageSize.height;

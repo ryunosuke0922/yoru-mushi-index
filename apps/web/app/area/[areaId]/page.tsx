@@ -112,6 +112,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
 
       <ForecastDashboard
         forecast={current}
+        shareUrl={absoluteUrl(`/area/${area.id}`)}
         showAreaLink={false}
         showAreaName={false}
       />

@@ -6,12 +6,14 @@ import { DataItem, SectionHeading } from "./PageScaffold";
 
 type ForecastDashboardProps = {
   forecast: Forecast;
+  shareUrl: string;
   showAreaLink?: boolean;
   showAreaName?: boolean;
 };
 
 export function ForecastDashboard({
   forecast,
+  shareUrl,
   showAreaLink = true,
   showAreaName = true,
 }: ForecastDashboardProps) {
@@ -45,6 +47,7 @@ export function ForecastDashboard({
               probabilityBand={forecast.probabilityBand}
               reasons={forecast.reasons}
               score={forecast.score}
+              url={shareUrl}
             />
           </div>
 

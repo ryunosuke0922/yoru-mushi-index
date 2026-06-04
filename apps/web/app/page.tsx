@@ -76,7 +76,7 @@ export default async function Home() {
         />
       </div>
 
-      <ForecastDashboard forecast={forecast} />
+      <ForecastDashboard forecast={forecast} shareUrl={absoluteUrl("/")} />
       <WeeklyForecastList forecasts={forecasts} />
     </PageScaffold>
   );
