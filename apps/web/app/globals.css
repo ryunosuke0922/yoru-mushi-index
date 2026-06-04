@@ -180,18 +180,36 @@ input:focus-visible {
 }
 
 .document-page h2 {
-  margin-top: 26px;
+  margin: 30px 0 10px;
+}
+
+.document-page h2:first-of-type {
+  margin-top: 24px;
 }
 
 .document-page ul {
   color: var(--text);
   display: grid;
-  gap: 10px;
+  gap: 8px;
   font-size: 0.86rem;
   font-weight: 650;
   line-height: 1.7;
-  margin: 14px 0 0;
-  padding-left: 1.2em;
+  margin: 10px 0 0;
+  padding-left: 1.55em;
+}
+
+.document-page li {
+  padding-left: 0.18em;
+}
+
+.document-page p + h2,
+.document-page ul + h2 {
+  margin-top: 34px;
+}
+
+.document-page ul + p,
+.document-page p + ul {
+  margin-top: 12px;
 }
 
 .area-jump-nav {
