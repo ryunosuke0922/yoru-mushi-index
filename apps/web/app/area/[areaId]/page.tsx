@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { findAreaById } from "@yoru-mushi-index/area";
+import { findAreaById, findNearbyAreas } from "@yoru-mushi-index/area";
 import {
   ForecastDashboard,
   WeeklyForecastList,
@@ -63,6 +63,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
   const today = todayKey();
   const forecasts = await buildWeeklyForecast(areaId, today);
   const current = forecasts[0];
+  const nearbyAreas = findNearbyAreas(area.id);
 
   if (!current) {
     notFound();
@@ -158,7 +159,21 @@ export default async function AreaPage({ params }: AreaPageProps) {
         title={area.name}
       >
         <p className="area-aliases">{area.aliases.slice(0, 4).join(" / ")}</p>
-        <p>今日から 7 日分の夜虫指数と、各日のおすすめ時間を表示します。</p>
+        <p className="page-intro-description">
+          今日から 7 日分の夜虫指数と、各日のおすすめ時間を表示します。
+        </p>
+        {nearbyAreas.length > 0 ? (
+          <nav className="nearby-area-nav" aria-label="近くのエリア">
+            <span>近くのエリア</span>
+            <div>
+              {nearbyAreas.map((nearbyArea) => (
+                <Link href={`/area/${nearbyArea.id}`} key={nearbyArea.id}>
+                  {nearbyArea.name}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        ) : null}
       </PageIntro>
 
       <ForecastDashboard

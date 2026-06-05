@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { areaFixtures } from "./areaFixtures";
 import {
   findAreaById,
+  findNearbyAreas,
   groupAreasByRegionAndPrefecture,
   searchAreas,
 } from "./areaResolver";
@@ -38,6 +39,20 @@ describe("area fixtures", () => {
 
   it("地方名でも検索できる", () => {
     expect(searchAreas("中部").length).toBeGreaterThan(0);
+  });
+
+  it("近いエリアを代表座標から取得できる", () => {
+    expect(
+      findNearbyAreas("shizuoka-east-20km-01").map((area) => area.id),
+    ).toEqual([
+      "shizuoka-central-20km-01",
+      "yamanashi-gunnai-20km-01",
+      "shizuoka-izu-20km-01",
+    ]);
+  });
+
+  it("存在しないエリアの近隣候補は空にする", () => {
+    expect(findNearbyAreas("missing-area")).toEqual([]);
   });
 
   it("地方と都道府県でグルーピングできる", () => {

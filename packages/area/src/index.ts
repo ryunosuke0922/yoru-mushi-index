@@ -1,6 +1,7 @@
 export { areaFixtures } from "./areaFixtures";
 export {
   findAreaById,
+  findNearbyAreas,
   groupAreasByRegionAndPrefecture,
   publicArea,
   searchAreas,

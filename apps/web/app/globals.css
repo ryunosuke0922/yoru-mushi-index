@@ -163,7 +163,7 @@ input:focus-visible {
   justify-content: flex-end;
 }
 
-.page-intro p:last-child,
+.page-intro-description,
 .document-page p {
   color: var(--muted);
   font-size: 0.86rem;
@@ -177,6 +177,49 @@ input:focus-visible {
   font-weight: 650;
   line-height: 1.6;
   margin: 0 0 6px;
+}
+
+.nearby-area-nav {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.nearby-area-nav span {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.nearby-area-nav div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.nearby-area-nav a {
+  align-items: center;
+  background: var(--surface-soft);
+  border: 0.5px solid var(--border);
+  border-radius: 999px;
+  color: var(--green);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 8px 14px;
+  transition:
+    opacity var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.nearby-area-nav a:hover {
+  transform: translateY(-1px);
+}
+
+.nearby-area-nav a:active {
+  opacity: 0.9;
+  transform: translateY(1px);
 }
 
 .document-page h2 {

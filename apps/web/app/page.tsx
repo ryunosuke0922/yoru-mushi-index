@@ -35,7 +35,9 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: jsonLd(pageJsonLd) }}
       />
       <PageIntro kicker="AREA" title="エリアを選択">
-        <p>地方別に分けた広域エリアから、今夜の飛翔条件を確認します。</p>
+        <p className="page-intro-description">
+          地方別に分けた広域エリアから、今夜の飛翔条件を確認します。
+        </p>
       </PageIntro>
 
       <AreaSelector />
