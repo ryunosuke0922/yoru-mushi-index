@@ -16,8 +16,46 @@ export function addDays(dateKey: string, days: number) {
   return dateKeyFormatter.format(date);
 }
 
+export function daysBetween(startDateKey: string, dateKey: string) {
+  const startDate = new Date(`${startDateKey}T00:00:00+09:00`);
+  const date = new Date(`${dateKey}T00:00:00+09:00`);
+
+  return Math.round((date.getTime() - startDate.getTime()) / 86_400_000);
+}
+
 export function formatHour(time: string) {
   return time.slice(11, 16);
+}
+
+export function formatNightDate(dateKey: string) {
+  return `${Number(dateKey.slice(5, 7))}/${Number(dateKey.slice(8, 10))} 夜`;
+}
+
+export function formatJstMinute(isoTime: string) {
+  const formatter = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  return formatter.format(new Date(isoTime));
+}
+
+export function nightLabel(dateKey: string, baseDateKey: string) {
+  const offset = daysBetween(baseDateKey, dateKey);
+
+  if (offset === 0) {
+    return "今夜";
+  }
+
+  if (offset === 1) {
+    return "明日夜";
+  }
+
+  return formatNightDate(dateKey);
 }
 
 export function moonPhaseName(phase: number) {

@@ -101,7 +101,22 @@ export function toForecastCondition(bestHour: ForecastHourlyScore) {
 }
 
 export function fallbackWeatherHours(date: string): WeatherHour[] {
-  return [addDays(date, -1), date].flatMap((dateKey) =>
+  return fallbackWeatherHoursRange(addDays(date, -1), date);
+}
+
+export function fallbackWeatherHoursRange(
+  startDate: string,
+  endDate: string,
+): WeatherHour[] {
+  const dates: string[] = [];
+  let date = startDate;
+
+  while (date <= endDate) {
+    dates.push(date);
+    date = addDays(date, 1);
+  }
+
+  return dates.flatMap((dateKey) =>
     Array.from({ length: 24 }, (_, hour) => ({
       time: `${dateKey}T${String(hour).padStart(2, "0")}:00`,
       temperature: hour >= 19 && hour <= 23 ? 23.5 - (hour - 19) * 0.4 : 22,

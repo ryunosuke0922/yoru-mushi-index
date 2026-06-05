@@ -160,7 +160,11 @@ export default async function AreaPage({ params }: AreaPageProps) {
       >
         <p className="area-aliases">{area.aliases.slice(0, 4).join(" / ")}</p>
         <p className="page-intro-description">
-          今日から 7 日分の夜虫指数と、各日のおすすめ時間を表示します。
+          夜虫指数は、今夜の気象条件と月明かりから、夜間に飛ぶ昆虫を観察しやすい時間を推定する指数です。
+        </p>
+        <p className="page-intro-note">
+          表示日は各日の夜 19:00-23:00
+          が対象です。見込みは観察条件の良さの目安で、出現数を保証しません。
         </p>
         {nearbyAreas.length > 0 ? (
           <nav className="nearby-area-nav" aria-label="近くのエリア">

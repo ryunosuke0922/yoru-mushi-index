@@ -65,6 +65,7 @@ Response fields:
 ## `GET /api/forecast/week`
 
 7 日分の夜虫指数を返す API。
+Open-Meteo は起点日の前日から 7 日目までを 1 回で取得し、日別にスコア化します。
 
 Query:
 

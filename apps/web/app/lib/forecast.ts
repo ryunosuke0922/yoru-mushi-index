@@ -13,10 +13,12 @@ import { addDays } from "./format";
 import {
   buildHourlyScores,
   fallbackWeatherHours,
+  fallbackWeatherHoursRange,
   findBestHour,
   formatBestTime,
   toForecastCondition,
 } from "./forecastScoring";
+import type { WeatherHour } from "@yoru-mushi-index/core";
 
 const openMeteoFetchOptions = {
   next: {
@@ -38,6 +40,44 @@ export async function buildForecast(areaId: string, date: string) {
     area.longitude,
     date,
   );
+  const generatedAt = new Date().toISOString();
+
+  return buildForecastFromWeather(area, date, weatherHours, generatedAt);
+}
+
+export async function buildWeeklyForecast(areaId: string, startDate: string) {
+  const area = findAreaById(areaId);
+
+  if (!area) {
+    return [];
+  }
+
+  const endDate = addDays(startDate, 6);
+  const weatherHours = await fetchWeatherHours(
+    area.latitude,
+    area.longitude,
+    startDate,
+    addDays(startDate, -1),
+    endDate,
+  );
+  const generatedAt = new Date().toISOString();
+
+  return Array.from({ length: 7 }, (_, index) =>
+    buildForecastFromWeather(
+      area,
+      addDays(startDate, index),
+      weatherHours,
+      generatedAt,
+    ),
+  );
+}
+
+function buildForecastFromWeather(
+  area: NonNullable<ReturnType<typeof findAreaById>>,
+  date: string,
+  weatherHours: WeatherHour[],
+  generatedAt: string,
+) {
   const baseAreaCondition = {
     seasonScore: area.seasonScore,
     habitatScore: area.habitatScore,
@@ -76,40 +116,35 @@ export async function buildForecast(areaId: string, date: string) {
           )
         : [],
     condition: bestHour ? toForecastCondition(bestHour) : null,
+    generatedAt,
     notice: "具体的な観察地点、街灯、採集地、生息地は表示していません。",
   };
-}
-
-export async function buildWeeklyForecast(areaId: string, startDate: string) {
-  const forecasts = await Promise.all(
-    Array.from({ length: 7 }, (_, index) =>
-      buildForecast(areaId, addDays(startDate, index)),
-    ),
-  );
-
-  return forecasts.filter(
-    (forecast): forecast is Forecast => forecast !== null,
-  );
 }
 
 async function fetchWeatherHours(
   latitude: number,
   longitude: number,
   date: string,
+  startDate = addDays(date, -1),
+  endDate = date,
 ) {
   try {
     const forecast = await fetchOpenMeteoForecast({
       latitude,
       longitude,
       date,
-      startDate: addDays(date, -1),
-      endDate: date,
+      startDate,
+      endDate,
       fetchOptions: openMeteoFetchOptions,
     });
 
     return normalizeWeatherHours(forecast);
   } catch (error) {
     console.warn("Failed to fetch Open-Meteo forecast. Using fallback.", error);
-    return fallbackWeatherHours(date);
+    if (startDate === addDays(date, -1) && endDate === date) {
+      return fallbackWeatherHours(date);
+    }
+
+    return fallbackWeatherHoursRange(startDate, endDate);
   }
 }

@@ -1,6 +1,12 @@
 import Link from "next/link";
 import type { Forecast } from "../lib/forecast";
-import { formatHour, moonPhaseName } from "../lib/format";
+import {
+  formatHour,
+  formatJstMinute,
+  formatNightDate,
+  moonPhaseName,
+  nightLabel,
+} from "../lib/format";
 import { DataItem, SectionHeading } from "./PageScaffold";
 
 type ForecastDashboardProps = {
@@ -52,8 +58,8 @@ export function ForecastDashboard({
 
           <div className="forecast-meta">
             <span>
-              <small>日付</small>
-              <strong>{forecast.date}</strong>
+              <small>対象日</small>
+              <strong>{formatNightDate(forecast.date)}</strong>
             </span>
             {forecast.bestTime ? (
               <span>
@@ -66,6 +72,10 @@ export function ForecastDashboard({
               <strong>{forecast.probabilityBand}</strong>
             </span>
           </div>
+          <p className="forecast-note">
+            見込みは観察条件の良さの目安です。最終計算:
+            {formatJstMinute(forecast.generatedAt)}
+          </p>
         </div>
 
         <div className="forecast-side">
@@ -174,6 +184,8 @@ export function ForecastDashboard({
 }
 
 export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
+  const baseDate = forecasts[0]?.date;
+
   return (
     <section className="data-section weekly-section">
       <SectionHeading kicker="DAILY" title="7 日分の指数" />
@@ -184,9 +196,12 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
             key={forecast.date}
           >
             <div className="daily-card-header">
-              <span>{forecast.date}</span>
+              <span>
+                {baseDate ? nightLabel(forecast.date, baseDate) : forecast.date}
+              </span>
               <p>{forecast.label}</p>
             </div>
+            <span className="daily-date">{formatNightDate(forecast.date)}</span>
             <div className="daily-score">
               <strong>{forecast.score}</strong>
               <span>/ 100</span>

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { fetchOpenMeteoForecast } from "@yoru-mushi-index/weather";
 import { expectNoCoordinates } from "../../testUtils";
 import { GET } from "./route";
 
@@ -40,6 +41,7 @@ describe("GET /api/forecast/week", () => {
       precision: "coarse_area",
     });
     expect(body.forecasts).toHaveLength(7);
+    expect(fetchOpenMeteoForecast).toHaveBeenCalledTimes(1);
     expectNoCoordinates(body);
   });
 

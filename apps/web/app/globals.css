@@ -171,6 +171,15 @@ input:focus-visible {
   line-height: 1.7;
 }
 
+.page-intro-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.6;
+  margin-top: 2px;
+  max-width: 920px;
+}
+
 .area-aliases {
   color: var(--accent);
   font-size: 0.82rem;
@@ -598,6 +607,15 @@ h2 {
   font-weight: 700;
 }
 
+.forecast-note {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 10px;
+  max-width: 460px;
+}
+
 .reasons {
   display: grid;
   gap: 9px;
@@ -842,6 +860,19 @@ h2 {
   color: var(--muted);
   font-size: 0.7rem;
   font-weight: 650;
+}
+
+.daily-card-header > span {
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.daily-date {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 650;
+  margin-top: -6px;
 }
 
 .daily-best-time {
