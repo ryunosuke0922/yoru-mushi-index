@@ -89,8 +89,17 @@ export default async function AreaPage({ params }: AreaPageProps) {
         mainEntity: {
           "@type": "Dataset",
           name: `${area.name}の夜虫指数`,
-          description:
-            "夜間昆虫の飛翔条件を気象条件と月条件から推定したエリア単位の指数です。",
+          description: `${area.name}を対象に、Open-Meteo の気象予報、SunCalc の月条件、季節と広域環境の補正から、夜間昆虫が飛翔しやすい条件を日別に推定した指数データです。具体的な観察地点、街灯、採集地、生息地、内部計算用の代表座標は含みません。`,
+          creator: {
+            "@type": "Person",
+            name: "ryuuuu092",
+            sameAs: [siteConfig.xUrl, siteConfig.githubUrl],
+          },
+          license: {
+            "@type": "CreativeWork",
+            name: "夜虫指数 公開データ利用条件",
+            url: absoluteUrl("/data-sources"),
+          },
           variableMeasured: [
             "気温",
             "湿度",
