@@ -15,6 +15,7 @@ export async function fetchOpenMeteoForecast(input: {
   date: string;
   startDate?: string;
   endDate?: string;
+  fetchOptions?: RequestInit;
 }): Promise<OpenMeteoForecastResponse> {
   const params = new URLSearchParams({
     latitude: String(input.latitude),
@@ -28,6 +29,7 @@ export async function fetchOpenMeteoForecast(input: {
 
   const response = await fetch(
     `https://api.open-meteo.com/v1/forecast?${params}`,
+    input.fetchOptions,
   );
 
   if (!response.ok) {

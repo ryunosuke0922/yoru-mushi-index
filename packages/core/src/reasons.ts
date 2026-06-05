@@ -5,6 +5,7 @@ import type {
   ScoreReasonTone,
   WeatherHour,
 } from "./types";
+import { seasonalActivityScore } from "./score";
 
 export function scoreReasons(
   weather: WeatherHour,
@@ -13,12 +14,21 @@ export function scoreReasons(
 ): ScoreReason[] {
   const reasons: ScoreReason[] = [];
 
-  if (weather.temperature >= 23) {
+  if (weather.temperature >= 24) {
     reasons.push(reason("気温が高めです", "positive"));
-  } else if (weather.temperature <= 16) {
+  } else if (weather.temperature < 18) {
     reasons.push(reason("気温が低く、飛翔は鈍りやすいです", "negative"));
-  } else if (weather.temperature < 20) {
+  } else if (weather.temperature < 22) {
     reasons.push(reason("気温はやや低めです", "negative"));
+  }
+
+  const seasonalActivity = seasonalActivityScore(weather.time);
+  if (seasonalActivity <= 0.2) {
+    reasons.push(reason("季節的に飛翔はかなり鈍りやすい時期です", "negative"));
+  } else if (seasonalActivity < 0.55) {
+    reasons.push(reason("季節的に飛翔はやや控えめな時期です", "negative"));
+  } else if (seasonalActivity >= 0.85) {
+    reasons.push(reason("季節的に飛翔しやすい時期です", "positive"));
   }
 
   if (weather.windSpeed <= 2.5 && weather.windGust <= 5) {

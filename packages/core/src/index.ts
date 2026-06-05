@@ -4,6 +4,7 @@ export {
   calculateNightInsectScore,
   calculateTaxaScores,
   moonEffect,
+  seasonalActivityScore,
 } from "./score";
 export type {
   AreaCondition,

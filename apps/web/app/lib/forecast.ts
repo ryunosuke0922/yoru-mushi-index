@@ -18,6 +18,12 @@ import {
   toForecastCondition,
 } from "./forecastScoring";
 
+const openMeteoFetchOptions = {
+  next: {
+    revalidate: 60 * 60,
+  },
+} as RequestInit & { next: { revalidate: number } };
+
 export type Forecast = NonNullable<Awaited<ReturnType<typeof buildForecast>>>;
 
 export async function buildForecast(areaId: string, date: string) {
@@ -98,6 +104,7 @@ async function fetchWeatherHours(
       date,
       startDate: addDays(date, -1),
       endDate: date,
+      fetchOptions: openMeteoFetchOptions,
     });
 
     return normalizeWeatherHours(forecast);

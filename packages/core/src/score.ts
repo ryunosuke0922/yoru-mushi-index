@@ -20,8 +20,13 @@ export function calculateNightInsectScore(
   score += moonScore(moon, weather.cloudCover);
   score += area.seasonScore * 15;
   score += area.habitatScore * 10;
+  score *= seasonalActivityScore(weather.time);
 
-  return clamp(Math.round(score), 0, 100);
+  return clamp(
+    Math.round(applyTemperatureCap(score, weather.temperature)),
+    0,
+    100,
+  );
 }
 
 export function calculateTaxaScores(
@@ -67,23 +72,120 @@ export function moonEffect(
 }
 
 function temperatureScore(temperature: number): number {
-  if (temperature >= 24) {
+  if (temperature >= 26) {
     return 18;
   }
 
+  if (temperature >= 24) {
+    return 12;
+  }
+
+  if (temperature >= 22) {
+    return 6;
+  }
+
   if (temperature >= 20) {
-    return 13;
+    return 0;
+  }
+
+  if (temperature >= 18) {
+    return -8;
   }
 
   if (temperature >= 16) {
-    return 5;
+    return -16;
   }
 
   if (temperature >= 12) {
-    return -10;
+    return -28;
   }
 
-  return -20;
+  return -40;
+}
+
+function applyTemperatureCap(score: number, temperature: number): number {
+  if (temperature < 12) {
+    return Math.min(score, 15);
+  }
+
+  if (temperature < 16) {
+    return Math.min(score, 30);
+  }
+
+  if (temperature < 18) {
+    return Math.min(score, 45);
+  }
+
+  if (temperature < 25) {
+    return Math.min(score, interpolateTemperatureCap(temperature));
+  }
+
+  if (temperature < 26) {
+    return Math.min(score, 95);
+  }
+
+  return score;
+}
+
+function interpolateTemperatureCap(temperature: number): number {
+  const capPoints = [
+    [18, 45],
+    [20, 55],
+    [21, 62],
+    [22, 70],
+    [23, 78],
+    [24, 86],
+    [25, 95],
+  ] as const;
+
+  const upperPoint = capPoints.find(([pointTemperature]) => {
+    return temperature <= pointTemperature;
+  });
+  const upperIndex = upperPoint ? capPoints.indexOf(upperPoint) : -1;
+
+  if (upperIndex <= 0) {
+    return capPoints[0][1];
+  }
+
+  const [lowerTemperature, lowerCap] = capPoints[upperIndex - 1]!;
+  const [upperTemperature, upperCap] = capPoints[upperIndex]!;
+  const progress =
+    (temperature - lowerTemperature) / (upperTemperature - lowerTemperature);
+
+  return lowerCap + (upperCap - lowerCap) * progress;
+}
+
+export function seasonalActivityScore(time: string): number {
+  const month = Number(time.slice(5, 7));
+
+  switch (month) {
+    case 1:
+      return 0.05;
+    case 2:
+      return 0.08;
+    case 3:
+      return 0.18;
+    case 4:
+      return 0.55;
+    case 5:
+      return 0.85;
+    case 6:
+      return 1;
+    case 7:
+      return 1;
+    case 8:
+      return 0.95;
+    case 9:
+      return 0.85;
+    case 10:
+      return 0.55;
+    case 11:
+      return 0.18;
+    case 12:
+      return 0.08;
+    default:
+      return 0.5;
+  }
 }
 
 function humidityScore(humidity: number): number {

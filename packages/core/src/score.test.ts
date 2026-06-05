@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { probabilityBand, scoreLabel } from "./labels";
 import { scoreReasons } from "./reasons";
-import { calculateNightInsectScore } from "./score";
+import { calculateNightInsectScore, seasonalActivityScore } from "./score";
 
 describe("calculateNightInsectScore", () => {
   it("暖かく無風で雨上がり、新月寄りなら高スコア", () => {
@@ -52,6 +52,64 @@ describe("calculateNightInsectScore", () => {
     );
 
     expect(score).toBeLessThanOrEqual(40);
+  });
+
+  it("20度台前半は他条件が良くても最上位帯に入りにくい", () => {
+    const score = calculateNightInsectScore(
+      {
+        time: "2026-06-06T21:00:00+09:00",
+        temperature: 20.6,
+        humidity: 83,
+        precipitation: 0,
+        windSpeed: 0.7,
+        windGust: 2.3,
+        cloudCover: 27,
+      },
+      {
+        illumination: 0.68,
+        altitudeDeg: -26.5,
+      },
+      {
+        seasonScore: 0.89,
+        habitatScore: 0.79,
+        recentRainMm24h: 0,
+      },
+    );
+
+    expect(score).toBe(59);
+  });
+
+  it("冬季は気象条件が良くても月別補正で抑える", () => {
+    const score = calculateNightInsectScore(
+      {
+        time: "2026-01-06T21:00:00+09:00",
+        temperature: 24,
+        humidity: 83,
+        precipitation: 0,
+        windSpeed: 0.7,
+        windGust: 2.3,
+        cloudCover: 80,
+      },
+      {
+        illumination: 0.1,
+        altitudeDeg: -10,
+      },
+      {
+        seasonScore: 0.9,
+        habitatScore: 0.8,
+        recentRainMm24h: 0,
+      },
+    );
+
+    expect(score).toBeLessThan(20);
+  });
+});
+
+describe("seasonalActivityScore", () => {
+  it("月ごとの活動しやすさを返す", () => {
+    expect(seasonalActivityScore("2026-01-06T21:00:00+09:00")).toBe(0.05);
+    expect(seasonalActivityScore("2026-06-06T21:00:00+09:00")).toBe(1);
+    expect(seasonalActivityScore("2026-08-06T21:00:00+09:00")).toBe(0.95);
   });
 });
 
@@ -109,6 +167,7 @@ describe("scoreReasons", () => {
     ).toEqual(
       expect.arrayContaining([
         { text: "気温はやや低めです", tone: "negative" },
+        { text: "季節的に飛翔しやすい時期です", tone: "positive" },
         { text: "風がやや強めです", tone: "negative" },
         { text: "直近の雨量は少なめです", tone: "negative" },
         { text: "湿度はやや低めです", tone: "negative" },

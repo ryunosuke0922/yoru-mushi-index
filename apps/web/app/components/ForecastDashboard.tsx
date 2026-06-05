@@ -44,6 +44,12 @@ export function ForecastDashboard({
             <span>/ 100</span>
           </div>
 
+          {condition ? (
+            <p className="score-context">
+              {condition.time.slice(11, 13)}:00時点の条件で算出
+            </p>
+          ) : null}
+
           <div className="forecast-meta">
             <span>
               <small>日付</small>
@@ -177,14 +183,41 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
             className={`daily-card ${isHighlightedScore(forecast.score) ? "daily-card-highlight" : ""}`}
             key={forecast.date}
           >
-            <span>{forecast.date}</span>
-            <strong>{forecast.score}</strong>
-            <p>{forecast.label}</p>
+            <div className="daily-card-header">
+              <span>{forecast.date}</span>
+              <p>{forecast.label}</p>
+            </div>
+            <div className="daily-score">
+              <strong>{forecast.score}</strong>
+              <span>/ 100</span>
+            </div>
             {forecast.bestTime ? (
-              <small>
+              <small className="daily-best-time">
                 <span>おすすめ</span>
                 {forecast.bestTime}
               </small>
+            ) : null}
+            {forecast.condition ? (
+              <div className="daily-condition">
+                <span>
+                  <small>時刻</small>
+                  <time dateTime={forecast.condition.time}>
+                    {formatHour(forecast.condition.time)}
+                  </time>
+                </span>
+                <span>
+                  <small>気温</small>
+                  {forecast.condition.temperature.toFixed(1)}℃
+                </span>
+                <span>
+                  <small>湿度</small>
+                  {Math.round(forecast.condition.humidity)}%
+                </span>
+                <span>
+                  <small>風速</small>
+                  {forecast.condition.windSpeed.toFixed(1)}m/s
+                </span>
+              </div>
             ) : null}
           </article>
         ))}

@@ -59,7 +59,7 @@ Response fields:
 - `hourly`: 19-23 時の時間別スコアと取得条件
 - `taxa`: 分類別スコア
 - `reasons`: スコア理由
-- `condition`: 代表時間帯の取得条件
+- `condition`: 代表時間帯の取得条件。`time` は表示スコアに使った hourly forecast の対象時刻。
 - `notice`: 地点情報を表示しない旨の注意
 
 ## `GET /api/forecast/week`
