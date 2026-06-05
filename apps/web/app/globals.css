@@ -259,6 +259,58 @@ input:focus-visible {
   margin-top: 34px;
 }
 
+.faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.faq-item,
+.document-link-panel {
+  background: var(--surface-soft);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.faq-item h3 {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.document-link-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 28px;
+}
+
+.document-link-panel a {
+  align-items: center;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 999px;
+  color: var(--green);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 8px 14px;
+  transition:
+    border-color var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.document-link-panel a:hover {
+  border-color: var(--green-border-hover);
+  transform: translateY(-1px);
+}
+
+.document-link-panel a:active {
+  transform: translateY(1px);
+}
+
 .document-page ul + p,
 .document-page p + ul {
   margin-top: 12px;
@@ -674,6 +726,38 @@ h2 {
   border: 0.5px solid var(--border);
   border-radius: var(--radius-panel);
   padding: 24px;
+}
+
+.night-guide-section {
+  display: grid;
+  gap: 12px;
+  margin-bottom: var(--space-section);
+}
+
+.night-guide-section p:not(.section-kicker) {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.night-guide-section a {
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 800;
+  justify-self: start;
+  transition:
+    opacity var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.night-guide-section a:hover {
+  transform: translateY(-1px);
+}
+
+.night-guide-section a:active {
+  opacity: 0.9;
+  transform: translateY(1px);
 }
 
 .section-heading {

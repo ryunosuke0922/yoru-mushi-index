@@ -5,6 +5,7 @@ import { absoluteUrl } from "./lib/seo";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     { path: "/", priority: 1 },
+    { path: "/conditions", priority: 0.7 },
     { path: "/scoring", priority: 0.6 },
     { path: "/data-sources", priority: 0.6 },
   ];

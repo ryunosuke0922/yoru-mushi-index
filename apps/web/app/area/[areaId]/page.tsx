@@ -77,6 +77,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
   ]
     .filter((line): line is string => line !== null)
     .join("\n");
+  const nightGuide = createNightGuide(current);
 
   const pageJsonLd = {
     "@context": "https://schema.org",
@@ -185,7 +186,58 @@ export default async function AreaPage({ params }: AreaPageProps) {
         showAreaLink={false}
         showAreaName={false}
       />
+      <section className="data-section night-guide-section">
+        <div>
+          <p className="section-kicker">GUIDE</p>
+          <h2>今夜の見方</h2>
+        </div>
+        <p>{nightGuide}</p>
+        <Link href="/conditions">夜に虫が飛びやすい条件を見る</Link>
+      </section>
       <WeeklyForecastList forecasts={forecasts} />
     </PageScaffold>
   );
+}
+
+function createNightGuide(
+  current: Awaited<ReturnType<typeof buildWeeklyForecast>>[number],
+) {
+  const condition = current.condition;
+  const scoreGuide =
+    current.score >= 70
+      ? "今夜は観察条件が良い寄りです。"
+      : current.score >= 50
+        ? "今夜は条件がそろう時間を選ぶと見やすい見込みです。"
+        : current.score >= 30
+          ? "今夜は条件が伸びにくく、短時間の確認向きです。"
+          : "今夜は夜間飛翔が控えめになりやすい条件です。";
+
+  if (!condition) {
+    return `${scoreGuide}指数は観察条件の目安で、出現数を保証するものではありません。`;
+  }
+
+  const weatherGuide =
+    condition.temperature >= 22 && condition.humidity >= 65
+      ? "気温と湿度は十分にあり、飛翔条件を支えています。"
+      : condition.temperature < 18
+        ? "気温が低めで、他の条件が良くても活動は抑えられやすいです。"
+        : condition.humidity < 50
+          ? "湿度が低めで、乾いた夜として見ます。"
+          : "気温と湿度は中程度で、風や雨の影響も合わせて見る夜です。";
+
+  const windRainGuide =
+    condition.precipitation > 0.5
+      ? "観察時間帯の雨が減点要素です。"
+      : condition.windSpeed >= 5 || condition.windGust >= 8
+        ? "風または突風が強めで、飛翔を妨げる可能性があります。"
+        : "雨と風の影響は大きくありません。";
+
+  const moonGuide =
+    condition.moonIllumination >= 0.6 &&
+    condition.moonAltitudeDeg > 0 &&
+    condition.cloudCover < 60
+      ? "月明かりはやや強く、明るさの影響を受ける条件です。"
+      : "月明かりの影響は限定的に見ています。";
+
+  return `${scoreGuide}${weatherGuide}${windRainGuide}${moonGuide}指数は広域エリアの目安で、具体的な観察地点を示すものではありません。`;
 }
