@@ -731,6 +731,7 @@ h2 {
 .night-guide-section {
   display: grid;
   gap: 12px;
+  margin-top: var(--space-section);
   margin-bottom: var(--space-section);
 }
 
