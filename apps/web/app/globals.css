@@ -82,6 +82,7 @@ input:focus-visible {
   font-size: 0.98rem;
   font-weight: 800;
   letter-spacing: 0.02em;
+  line-height: 1;
   transition:
     opacity var(--motion-fast) var(--ease-out),
     transform var(--motion-fast) var(--ease-out);
@@ -105,10 +106,11 @@ input:focus-visible {
 }
 
 .site-header nav a {
-  border-bottom: 2px solid transparent;
-  padding: 0 0 5px;
+  box-shadow: inset 0 -2px 0 transparent;
+  line-height: 1;
+  padding: 5px 0;
   transition:
-    border-color var(--motion-fast) var(--ease-out),
+    box-shadow var(--motion-fast) var(--ease-out),
     color var(--motion-fast) var(--ease-out),
     transform var(--motion-fast) var(--ease-out);
 }
@@ -123,7 +125,7 @@ input:focus-visible {
 }
 
 .site-header nav a[aria-current="page"] {
-  border-color: var(--green);
+  box-shadow: inset 0 -2px 0 var(--green);
   color: var(--green);
 }
 
@@ -185,7 +187,7 @@ input:focus-visible {
   font-size: 0.82rem;
   font-weight: 650;
   line-height: 1.6;
-  margin: 0 0 6px;
+  margin: 8px 0 6px;
 }
 
 .nearby-area-nav {
@@ -379,6 +381,8 @@ input:focus-visible {
   color: var(--green);
   font-size: 1rem;
   font-weight: 800;
+  line-height: 1.4;
+  margin: 0;
   scroll-margin-top: 76px;
 }
 
@@ -396,6 +400,8 @@ input:focus-visible {
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
+  line-height: 1.4;
+  margin: 0;
   scroll-margin-top: 76px;
 }
 
@@ -1179,15 +1185,23 @@ h2 {
   }
 
   .site-header {
-    align-items: start;
-    flex-direction: column;
+    align-items: center;
     gap: 14px;
+    margin-bottom: 18px;
   }
 
   .site-header nav {
+    flex: 1 1 auto;
     gap: 16px;
+    justify-content: flex-end;
+    min-width: 0;
     overflow-x: auto;
-    width: 100%;
+  }
+
+  .page-intro,
+  .document-page {
+    border-radius: 24px;
+    padding: 24px;
   }
 
   .page-intro-heading {
