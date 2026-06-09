@@ -197,7 +197,9 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
           >
             <div className="daily-card-header">
               <span>
-                {baseDate ? nightLabel(forecast.date, baseDate) : forecast.date}
+                {baseDate
+                  ? nightLabel(forecast.date, baseDate)
+                  : formatNightDate(forecast.date)}
               </span>
               <p>{forecast.label}</p>
             </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ScoreReason } from "@yoru-mushi-index/core";
 import { colors } from "../lib/designTokens";
+import { formatNightDate } from "../lib/format";
 
 type ForecastImageShareButtonProps = {
   areaName: string;
@@ -124,7 +125,13 @@ async function createForecastImage({
   context.fillText("/ 100", scoreText.length >= 3 ? 500 : 390, 322);
 
   const chips = [
-    { key: "日付", value: date, width: 306, x: layout.leftX, y: 404 },
+    {
+      key: "日付",
+      value: formatNightDate(date),
+      width: 306,
+      x: layout.leftX,
+      y: 404,
+    },
     {
       key: "見込み",
       value: probabilityBand,

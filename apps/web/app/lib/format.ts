@@ -4,6 +4,10 @@ const dateKeyFormatter = new Intl.DateTimeFormat("sv-SE", {
   month: "2-digit",
   day: "2-digit",
 });
+const weekdayFormatter = new Intl.DateTimeFormat("ja-JP", {
+  timeZone: "Asia/Tokyo",
+  weekday: "short",
+});
 
 export function todayKey() {
   return dateKeyFormatter.format(new Date());
@@ -28,7 +32,10 @@ export function formatHour(time: string) {
 }
 
 export function formatNightDate(dateKey: string) {
-  return `${Number(dateKey.slice(5, 7))}/${Number(dateKey.slice(8, 10))} 夜`;
+  const date = new Date(`${dateKey}T00:00:00+09:00`);
+  const weekday = weekdayFormatter.format(date);
+
+  return `${Number(dateKey.slice(5, 7))}/${Number(dateKey.slice(8, 10))}（${weekday}）夜`;
 }
 
 export function formatJstMinute(isoTime: string) {
