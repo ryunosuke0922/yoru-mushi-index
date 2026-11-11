@@ -20,13 +20,9 @@ export function calculateNightInsectScore(
   score += moonScore(moon, weather.cloudCover);
   score += area.seasonScore * 15;
   score += area.habitatScore * 10;
-  score *= seasonalActivityScore(weather.time);
+  score *= area.season.factor;
 
-  return clamp(
-    Math.round(applyTemperatureCap(score, weather.temperature)),
-    0,
-    100,
-  );
+  return finalizeScore(score, weather);
 }
 
 export function calculateTaxaScores(
@@ -40,18 +36,42 @@ export function calculateTaxaScores(
   const aquaticHabitatBoost = area.habitatScore * 4;
 
   return {
-    moths: clamp(Math.round(totalScore + mothHabitatBoost), 0, 100),
-    beetles: clamp(
-      Math.round(totalScore - 12 + beetleTemperatureBoost),
-      0,
-      100,
-    ),
-    aquaticInsects: clamp(
-      Math.round(totalScore - 4 + aquaticRainBoost + aquaticHabitatBoost),
-      0,
-      100,
+    moths: finalizeScore(totalScore + mothHabitatBoost, weather),
+    beetles: finalizeScore(totalScore - 12 + beetleTemperatureBoost, weather),
+    aquaticInsects: finalizeScore(
+      totalScore - 4 + aquaticRainBoost + aquaticHabitatBoost,
+      weather,
     ),
   };
+}
+
+function finalizeScore(score: number, weather: WeatherHour): number {
+  const temperatureCapped = applyTemperatureCap(score, weather.temperature);
+  return clamp(Math.round(applyWeatherCap(temperatureCapped, weather)), 0, 100);
+}
+
+function applyWeatherCap(score: number, weather: WeatherHour): number {
+  // Provisional product guardrails, not empirically calibrated biological
+  // thresholds. Reuse the existing rain/wind categories so favorable factors
+  // cannot cancel adverse weather into an ordinary or high observation score.
+  // The same guardrails apply to taxa scores after their individual bonuses.
+  if (
+    weather.precipitation >= 2 ||
+    weather.windSpeed > 6 ||
+    weather.windGust > 10
+  ) {
+    return Math.min(score, 29);
+  }
+
+  if (
+    weather.precipitation >= 0.5 ||
+    weather.windSpeed > 4 ||
+    weather.windGust > 7
+  ) {
+    return Math.min(score, 49);
+  }
+
+  return score;
 }
 
 export function moonEffect(
@@ -153,39 +173,6 @@ function interpolateTemperatureCap(temperature: number): number {
     (temperature - lowerTemperature) / (upperTemperature - lowerTemperature);
 
   return lowerCap + (upperCap - lowerCap) * progress;
-}
-
-export function seasonalActivityScore(time: string): number {
-  const month = Number(time.slice(5, 7));
-
-  switch (month) {
-    case 1:
-      return 0.05;
-    case 2:
-      return 0.08;
-    case 3:
-      return 0.18;
-    case 4:
-      return 0.55;
-    case 5:
-      return 0.85;
-    case 6:
-      return 1;
-    case 7:
-      return 1;
-    case 8:
-      return 0.95;
-    case 9:
-      return 0.85;
-    case 10:
-      return 0.55;
-    case 11:
-      return 0.18;
-    case 12:
-      return 0.08;
-    default:
-      return 0.5;
-  }
 }
 
 function humidityScore(humidity: number): number {

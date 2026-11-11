@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { groupAreasByRegionAndPrefecture } from "@yoru-mushi-index/area";
+import { PageIntro } from "./PageScaffold";
 
 export function AreaSelector() {
   const groupedAreas = groupAreasByRegionAndPrefecture();
   const regionEntries = Object.entries(groupedAreas).map(
     ([region, prefectures]) => ({
-      id: toAnchorId(region),
       name: region,
       prefectures: Object.entries(prefectures).map(([prefecture, areas]) => ({
-        id: toAnchorId(`${region}-${prefecture}`),
+        id: `${region}-${prefecture}`,
         name: prefecture,
         areas,
       })),
@@ -17,10 +17,15 @@ export function AreaSelector() {
 
   return (
     <>
+      <PageIntro title="エリア別予報">
+        <p className="page-intro-description">
+          エリアを選ぶと、今夜の夜虫指数と観察に向いた時間を確認できます。
+        </p>
+      </PageIntro>
       <nav className="area-jump-nav" aria-label="エリア一覧の移動">
-        <div className="area-jump-row" aria-label="地方">
+        <div className="area-jump-row">
           {regionEntries.map((region) => (
-            <a href={`#${region.id}`} key={region.id}>
+            <a href={`#${encodeURIComponent(region.name)}`} key={region.name}>
               {region.name}
             </a>
           ))}
@@ -31,18 +36,20 @@ export function AreaSelector() {
         {regionEntries.map((region) => (
           <section
             className="area-group"
-            aria-labelledby={region.id}
-            key={region.id}
+            aria-labelledby={region.name}
+            key={region.name}
           >
-            <h2 id={region.id}>{region.name}</h2>
+            <h2 id={region.name}>{region.name}</h2>
             <div className="prefecture-groups">
               {region.prefectures.map((prefecture) => (
-                <section
+                <div
                   className="prefecture-group"
-                  aria-labelledby={prefecture.id}
+                  id={prefecture.id}
                   key={prefecture.id}
                 >
-                  <h3 id={prefecture.id}>{prefecture.name}</h3>
+                  {prefecture.name !== region.name && (
+                    <h3>{prefecture.name}</h3>
+                  )}
                   <div className="area-list">
                     {prefecture.areas.map((area) => (
                       <Link
@@ -54,10 +61,13 @@ export function AreaSelector() {
                           {area.name.replace(`${area.prefecture} `, "")}
                         </span>
                         <small>{area.aliases.slice(0, 4).join(" / ")}</small>
+                        <span className="area-arrow" aria-hidden="true">
+                          →
+                        </span>
                       </Link>
                     ))}
                   </div>
-                </section>
+                </div>
               ))}
             </div>
           </section>
@@ -65,8 +75,4 @@ export function AreaSelector() {
       </div>
     </>
   );
-}
-
-function toAnchorId(value: string) {
-  return encodeURIComponent(value);
 }

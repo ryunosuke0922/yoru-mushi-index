@@ -13,6 +13,6 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "vitest": "latest"
+    "vitest": "5.1.0"
   }
 }

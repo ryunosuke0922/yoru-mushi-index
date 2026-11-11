@@ -1,0 +1,2 @@
+# Keep the vendored upstream skill intact.
+.agents/skills/unslop/

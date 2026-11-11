@@ -11,4 +11,18 @@ export type CoarseArea = {
   locationPolicy: "no_points";
   seasonScore: number;
   habitatScore: number;
+  monthlyMeanTemperaturesC: readonly [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+  ];
 };

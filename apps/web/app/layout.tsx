@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DesignProvider } from "./components/DesignProvider";
 import { GoogleAnalytics } from "./components/GoogleAnalytics";
 import { absoluteUrl, jsonLd, siteConfig, socialImage } from "./lib/seo";
 
@@ -77,13 +78,18 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html
+      lang="ja"
+      data-theme="light"
+      data-astryx-theme="neutral"
+      suppressHydrationWarning
+    >
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd) }}
         />
-        {children}
+        <DesignProvider>{children}</DesignProvider>
         <GoogleAnalytics
           measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
         />

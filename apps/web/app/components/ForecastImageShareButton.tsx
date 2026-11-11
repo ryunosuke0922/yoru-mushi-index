@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@astryxdesign/core/Button";
 import { useState } from "react";
 import type { ScoreReason } from "@yoru-mushi-index/core";
 import { colors } from "../lib/designTokens";
@@ -10,7 +11,7 @@ type ForecastImageShareButtonProps = {
   bestTime: string | null;
   date: string;
   label: string;
-  probabilityBand: string;
+  partial?: boolean;
   reasons: ScoreReason[];
   score: number;
   url: string;
@@ -32,7 +33,7 @@ export function ForecastImageShareButton({
   bestTime,
   date,
   label,
-  probabilityBand,
+  partial = false,
   reasons,
   score,
   url,
@@ -45,7 +46,7 @@ export function ForecastImageShareButton({
       bestTime,
       date,
       label,
-      probabilityBand,
+      partial,
       reasons,
       score,
     });
@@ -57,7 +58,7 @@ export function ForecastImageShareButton({
       try {
         await navigator.share({
           files: [file],
-          text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。\n${url}`,
+          text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。${partial ? "取得できた時間帯のみの参考値です。" : "精度検証前の参考指数です。"}\n${url}`,
           title: "夜虫指数",
         });
       } catch {
@@ -72,9 +73,10 @@ export function ForecastImageShareButton({
   }
 
   return (
-    <button className="image-share-button" onClick={handleClick} type="button">
-      {status === "done" ? "画像を作成済み" : "画像で共有"}
-    </button>
+    <Button
+      label={status === "done" ? "画像を作成済み" : "画像で共有"}
+      onClick={handleClick}
+    />
   );
 }
 
@@ -83,7 +85,7 @@ async function createForecastImage({
   bestTime,
   date,
   label,
-  probabilityBand,
+  partial,
   reasons,
   score,
 }: ForecastImageInput) {
@@ -133,13 +135,6 @@ async function createForecastImage({
       y: 404,
     },
     {
-      key: "見込み",
-      value: probabilityBand,
-      width: 206,
-      x: layout.leftX + 320,
-      y: 404,
-    },
-    {
       key: "おすすめ",
       value: bestTime ?? "-",
       width: 306,
@@ -149,6 +144,16 @@ async function createForecastImage({
   ];
   chips.forEach((chip) =>
     metaChip(context, chip.key, chip.value, chip.x, chip.y, chip.width),
+  );
+
+  context.fillStyle = colors.muted;
+  context.font = font(500, 18);
+  context.fillText(
+    partial
+      ? "一部時間帯のデータのみ・精度検証前の参考指数"
+      : "精度検証前の参考指数",
+    layout.leftX,
+    532,
   );
 
   context.strokeStyle = colors.border;

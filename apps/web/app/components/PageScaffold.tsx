@@ -1,26 +1,31 @@
 import type { ReactNode } from "react";
+import { SeasonalNotice, type SeasonalNoticeProps } from "./SeasonalNotice";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 
-export function PageScaffold({ children }: { children: ReactNode }) {
+export function PageScaffold({
+  children,
+  forecast,
+}: { children: ReactNode } & SeasonalNoticeProps) {
   return (
-    <main className="page">
-      <div className="shell">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-      </div>
-    </main>
+    <>
+      <SeasonalNotice forecast={forecast} />
+      <main className="page">
+        <div className="shell">
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </div>
+      </main>
+    </>
   );
 }
 
 export function PageIntro({
-  kicker,
   title,
   action,
   children,
 }: {
-  kicker: string;
   title: string;
   action?: ReactNode;
   children: ReactNode;
@@ -28,10 +33,7 @@ export function PageIntro({
   return (
     <section className="page-intro">
       <div className="page-intro-heading">
-        <div>
-          <p className="section-kicker">{kicker}</p>
-          <h1>{title}</h1>
-        </div>
+        <h1>{title}</h1>
         {action ? <div className="page-intro-action">{action}</div> : null}
       </div>
       {children}
@@ -40,36 +42,22 @@ export function PageIntro({
 }
 
 export function DocumentPage({
-  kicker,
   title,
   children,
 }: {
-  kicker: string;
   title: string;
   children: ReactNode;
 }) {
   return (
     <section className="document-page">
-      <p className="section-kicker">{kicker}</p>
       <h1>{title}</h1>
       {children}
     </section>
   );
 }
 
-export function SectionHeading({
-  kicker,
-  title,
-}: {
-  kicker: string;
-  title: string;
-}) {
-  return (
-    <div className="section-heading">
-      <p className="section-kicker">{kicker}</p>
-      <h2>{title}</h2>
-    </div>
-  );
+export function SectionHeading({ title }: { title: string }) {
+  return <h2 className="section-heading">{title}</h2>;
 }
 
 export function DataItem({ label, value }: { label: string; value: string }) {

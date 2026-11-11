@@ -1,24 +1,26 @@
-import { findAreaById, publicArea } from "@yoru-mushi-index/area";
+import {
+  findAreaById,
+  publicArea,
+  type CoarseArea,
+} from "@yoru-mushi-index/area";
 import {
   calculateTaxaScores,
-  probabilityBand,
   scoreLabel,
   scoreReasons,
+  seasonForMonth,
 } from "@yoru-mushi-index/core";
 import {
   fetchOpenMeteoForecast,
   normalizeWeatherHours,
+  type WeatherSample,
 } from "@yoru-mushi-index/weather";
 import { addDays } from "./format";
 import {
   buildHourlyScores,
-  fallbackWeatherHours,
-  fallbackWeatherHoursRange,
   findBestHour,
   formatBestTime,
   toForecastCondition,
 } from "./forecastScoring";
-import type { WeatherHour } from "@yoru-mushi-index/core";
 
 const openMeteoFetchOptions = {
   next: {
@@ -26,7 +28,15 @@ const openMeteoFetchOptions = {
   },
 } as RequestInit & { next: { revalidate: number } };
 
-export type Forecast = NonNullable<Awaited<ReturnType<typeof buildForecast>>>;
+const weeklyForecastDays = 7;
+
+export type Forecast = ReturnType<typeof buildForecastFromWeather>;
+export type ForecastStatus = "available" | "partial" | "unavailable";
+
+type WeatherResult = {
+  hours: WeatherSample[];
+  source: "open-meteo" | "unavailable";
+};
 
 export async function buildForecast(areaId: string, date: string) {
   const area = findAreaById(areaId);
@@ -35,14 +45,10 @@ export async function buildForecast(areaId: string, date: string) {
     return null;
   }
 
-  const weatherHours = await fetchWeatherHours(
-    area.latitude,
-    area.longitude,
-    date,
-  );
+  const weather = await fetchWeatherHours(area, date);
   const generatedAt = new Date().toISOString();
 
-  return buildForecastFromWeather(area, date, weatherHours, generatedAt);
+  return buildForecastFromWeather(area, date, weather, generatedAt);
 }
 
 export async function buildWeeklyForecast(areaId: string, startDate: string) {
@@ -52,39 +58,46 @@ export async function buildWeeklyForecast(areaId: string, startDate: string) {
     return [];
   }
 
-  const endDate = addDays(startDate, 6);
-  const weatherHours = await fetchWeatherHours(
-    area.latitude,
-    area.longitude,
-    startDate,
-    addDays(startDate, -1),
-    endDate,
-  );
+  const lastNight = addDays(startDate, weeklyForecastDays - 1);
+  const weather = await fetchWeatherHours(area, startDate, lastNight);
   const generatedAt = new Date().toISOString();
 
-  return Array.from({ length: 7 }, (_, index) =>
+  return Array.from({ length: weeklyForecastDays }, (_, index) =>
     buildForecastFromWeather(
       area,
       addDays(startDate, index),
-      weatherHours,
+      weather,
       generatedAt,
     ),
   );
 }
 
 function buildForecastFromWeather(
-  area: NonNullable<ReturnType<typeof findAreaById>>,
+  area: CoarseArea,
   date: string,
-  weatherHours: WeatherHour[],
+  weather: WeatherResult,
   generatedAt: string,
 ) {
+  const season = seasonForMonth(date, area.monthlyMeanTemperaturesC);
   const baseAreaCondition = {
+    season,
     seasonScore: area.seasonScore,
     habitatScore: area.habitatScore,
   };
-  const hourly = buildHourlyScores(weatherHours, area, baseAreaCondition, date);
+  const hourly = buildHourlyScores(
+    weather.hours,
+    area,
+    baseAreaCondition,
+    date,
+  );
   const bestHour = findBestHour(hourly);
-  const score = bestHour?.score ?? 0;
+  const score = bestHour?.score ?? null;
+  const status: ForecastStatus =
+    hourly.length === 5
+      ? "available"
+      : hourly.length > 0
+        ? "partial"
+        : "unavailable";
   const bestHourAreaCondition = bestHour
     ? {
         ...baseAreaCondition,
@@ -95,13 +108,27 @@ function buildForecastFromWeather(
   return {
     area: publicArea(area),
     date,
+    season,
+    status,
+    dataSource: weather.source,
+    availableHours: hourly.length,
+    expectedHours: 5,
+    modelVersion: "heuristic-v0.2",
+    calibration: "uncalibrated",
+    dataNotice:
+      status === "unavailable"
+        ? "必要な気象データを取得できないため、指数を表示できません。時間をおいて再度ご確認ください。"
+        : status === "partial"
+          ? `気象データのある ${hourly.length} / 5 時間帯だけを表示しています。おすすめは取得できた時間帯の中での比較です。`
+          : null,
     score,
-    label: scoreLabel(score),
+    label: score === null ? null : scoreLabel(score),
     bestTime: bestHour ? formatBestTime(bestHour) : null,
-    probabilityBand: probabilityBand(score),
+    // Deprecated: no observed event or calibration supports a percentage.
+    probabilityBand: null,
     hourly,
     taxa:
-      bestHour && bestHourAreaCondition
+      score !== null && bestHour && bestHourAreaCondition
         ? calculateTaxaScores(score, bestHour, bestHourAreaCondition)
         : null,
     reasons:
@@ -122,29 +149,24 @@ function buildForecastFromWeather(
 }
 
 async function fetchWeatherHours(
-  latitude: number,
-  longitude: number,
-  date: string,
-  startDate = addDays(date, -1),
-  endDate = date,
-) {
+  area: CoarseArea,
+  firstNight: string,
+  lastNight = firstNight,
+): Promise<WeatherResult> {
   try {
     const forecast = await fetchOpenMeteoForecast({
-      latitude,
-      longitude,
-      date,
-      startDate,
-      endDate,
+      latitude: area.latitude,
+      longitude: area.longitude,
+      date: firstNight,
+      // Rain history begins the day before; the last interval ends the next midnight.
+      startDate: addDays(firstNight, -1),
+      endDate: addDays(lastNight, 1),
       fetchOptions: openMeteoFetchOptions,
     });
 
-    return normalizeWeatherHours(forecast);
-  } catch (error) {
-    console.warn("Failed to fetch Open-Meteo forecast. Using fallback.", error);
-    if (startDate === addDays(date, -1) && endDate === date) {
-      return fallbackWeatherHours(date);
-    }
-
-    return fallbackWeatherHoursRange(startDate, endDate);
+    return { hours: normalizeWeatherHours(forecast), source: "open-meteo" };
+  } catch {
+    console.warn("Open-Meteo weather unavailable. No substitute data used.");
+    return { hours: [], source: "unavailable" };
   }
 }

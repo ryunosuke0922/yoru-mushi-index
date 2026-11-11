@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { areaFixtures } from "@yoru-mushi-index/area";
 import { AreaSelector } from "./components/AreaSelector";
-import { PageIntro } from "./components/PageScaffold";
 import { PageScaffold } from "./components/PageScaffold";
 import {
   absoluteUrl,
@@ -34,12 +33,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(pageJsonLd) }}
       />
-      <PageIntro kicker="AREA" title="エリアを選択">
-        <p className="page-intro-description">
-          地方別に分けた広域エリアから、今夜の飛翔条件を確認します。
-        </p>
-      </PageIntro>
-
       <AreaSelector />
     </PageScaffold>
   );

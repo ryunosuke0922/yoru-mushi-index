@@ -7,12 +7,12 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "suncalc": "latest"
+    "suncalc": "1.9.0"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/suncalc": "latest"
+    "@types/suncalc": "1.9.2"
   }
 }

@@ -60,7 +60,7 @@ Next.js App Router のアプリです。
 Open-Meteo の取得と正規化を担当します。
 
 外部 API のレスポンス形式をアプリ全体に直接広げず、`WeatherHour[]` に変換します。
-直近 24 時間雨量は、代表時刻より前の過去 24 時間だけを合算します。
+直近24時間雨量は、観察開始時刻 `t` に対して `(t-24h, t]` の24個の時間雨量を合算します。欠測・不正な入力を0に補完せず、履歴が揃わなければその時間帯を算出しません。
 
 ## `packages/astro`
 
@@ -87,7 +87,7 @@ area fixture lookup
   ↓
 Open-Meteo hourly forecast
   ↓
-previous date + target date weather hours
+previous date through following midnight
   ↓
 WeatherHour[] normalization
   ↓

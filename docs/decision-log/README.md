@@ -26,6 +26,8 @@ Example:
 
 ## Records
 
-| #    | Title            | Status   |
-| :--- | :--------------- | :------- |
-| 0001 | Next.js monorepo | Accepted |
+| #    | Title                                                                              | Status   |
+| :--- | :--------------------------------------------------------------------------------- | :------- |
+| 0001 | Next.js monorepo                                                                   | Accepted |
+| 0002 | [エリア別の季節補正](0002-regional-season.md)                                      | Accepted |
+| 0003 | [Forecast data integrity and uncalibrated scores](0003-forecast-data-integrity.md) | Accepted |

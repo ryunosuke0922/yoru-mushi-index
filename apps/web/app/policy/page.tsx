@@ -16,7 +16,7 @@ export const metadata: Metadata = createPageMetadata({
 export default function PolicyPage() {
   return (
     <PageScaffold>
-      <DocumentPage kicker="LOCATION POLICY" title="地点情報ポリシー">
+      <DocumentPage title="地点情報ポリシー">
         <p>
           このサービスは、具体的な観察地点、街灯、採集地、生息地を公開しません。
         </p>

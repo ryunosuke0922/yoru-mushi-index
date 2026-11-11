@@ -10,9 +10,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Area not found" }, { status: 404 });
   }
 
-  return NextResponse.json({
-    area: forecasts[0].area,
-    date,
-    forecasts,
-  });
+  return NextResponse.json(
+    {
+      area: forecasts[0].area,
+      date,
+      forecasts,
+    },
+    {
+      status: forecasts.every((forecast) => forecast.status === "unavailable")
+        ? 503
+        : 200,
+    },
+  );
 }

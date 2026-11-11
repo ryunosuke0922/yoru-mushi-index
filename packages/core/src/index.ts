@@ -1,11 +1,11 @@
-export { probabilityBand, scoreLabel } from "./labels";
+export { scoreLabel } from "./labels";
 export { scoreReasons } from "./reasons";
 export {
   calculateNightInsectScore,
   calculateTaxaScores,
   moonEffect,
-  seasonalActivityScore,
 } from "./score";
+export { seasonForMonth, type RegionalSeason } from "./season";
 export type {
   AreaCondition,
   HourlyScore,

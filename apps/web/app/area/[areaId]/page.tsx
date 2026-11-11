@@ -1,3 +1,4 @@
+import { Button } from "@astryxdesign/core/Button";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -9,7 +10,7 @@ import {
 import { ForecastImageShareButton } from "../../components/ForecastImageShareButton";
 import { ForecastShareButton } from "../../components/ForecastShareButton";
 import { PageIntro, PageScaffold } from "../../components/PageScaffold";
-import { buildWeeklyForecast } from "../../lib/forecast";
+import { buildWeeklyForecast, type Forecast } from "../../lib/forecast";
 import { todayKey } from "../../lib/format";
 import {
   absoluteUrl,
@@ -71,9 +72,15 @@ export default async function AreaPage({ params }: AreaPageProps) {
 
   const shareUrl = absoluteUrl(`/area/${area.id}`);
   const shareText = [
-    `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
+    current.score === null
+      ? `${current.area.name}の夜虫指数は、現在データを取得できません。`
+      : `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
     current.bestTime ? `おすすめ時間は ${current.bestTime}。` : null,
-    `見込みは ${current.probabilityBand}。`,
+    current.status === "partial"
+      ? "取得できた時間帯のみで比較した、精度検証前の参考指数です。"
+      : current.score !== null
+        ? "精度検証前の参考指数です。"
+        : null,
   ]
     .filter((line): line is string => line !== null)
     .join("\n");
@@ -108,7 +115,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
             "風速",
             "降水量",
             "雲量",
-            "月照度",
+            "月の照明割合",
             "月相",
           ],
           spatialCoverage: {
@@ -125,7 +132,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
   };
 
   return (
-    <PageScaffold>
+    <PageScaffold forecast={current}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(pageJsonLd) }}
@@ -133,30 +140,28 @@ export default async function AreaPage({ params }: AreaPageProps) {
       <PageIntro
         action={
           <div className="page-intro-actions">
-            <ForecastShareButton
-              text={shareText}
-              title={`${current.area.name}の夜虫指数は ${current.score}`}
-              url={shareUrl}
-            />
-            <ForecastImageShareButton
-              areaName={current.area.name}
-              bestTime={current.bestTime}
-              date={current.date}
-              label={current.label}
-              probabilityBand={current.probabilityBand}
-              reasons={current.reasons}
-              score={current.score}
-              url={shareUrl}
-            />
-            <Link
-              className="area-select-link area-select-link-secondary"
-              href="/areas"
-            >
-              エリアを選ぶ
-            </Link>
+            {current.score !== null && current.label !== null ? (
+              <>
+                <ForecastShareButton
+                  text={shareText}
+                  title={`${current.area.name}の夜虫指数は ${current.score}`}
+                  url={shareUrl}
+                />
+                <ForecastImageShareButton
+                  areaName={current.area.name}
+                  bestTime={current.bestTime}
+                  date={current.date}
+                  label={current.label}
+                  partial={current.status === "partial"}
+                  reasons={current.reasons}
+                  score={current.score}
+                  url={shareUrl}
+                />
+              </>
+            ) : null}
+            <Button href="/areas" label="エリアを選ぶ" variant="primary" />
           </div>
         }
-        kicker="AREA FORECAST"
         title={area.name}
       >
         <p className="area-aliases">{area.aliases.slice(0, 4).join(" / ")}</p>
@@ -164,8 +169,8 @@ export default async function AreaPage({ params }: AreaPageProps) {
           夜虫指数は、今夜の気象条件と月明かりから、夜間に飛ぶ昆虫を観察しやすい時間を推定する指数です。
         </p>
         <p className="page-intro-note">
-          表示日は各日の夜 19:00-23:00
-          が対象です。見込みは観察条件の良さの目安で、出現数を保証しません。
+          各日の夜 19:00〜翌 0:00 を 1
+          時間ごとに比較します。指数は最も条件がよい時間帯の参考値です。
         </p>
         {nearbyAreas.length > 0 ? (
           <nav className="nearby-area-nav" aria-label="近くのエリア">
@@ -187,10 +192,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
         showAreaName={false}
       />
       <section className="data-section night-guide-section">
-        <div>
-          <p className="section-kicker">GUIDE</p>
-          <h2>今夜の見方</h2>
-        </div>
+        <h2>今夜の見方</h2>
         <p>{nightGuide}</p>
         <Link href="/conditions">夜に虫が飛びやすい条件を見る</Link>
       </section>
@@ -199,36 +201,35 @@ export default async function AreaPage({ params }: AreaPageProps) {
   );
 }
 
-function createNightGuide(
-  current: Awaited<ReturnType<typeof buildWeeklyForecast>>[number],
-) {
-  const condition = current.condition;
-  const scoreGuide =
-    current.score >= 70
-      ? "今夜は観察条件が良い寄りです。"
-      : current.score >= 50
-        ? "今夜は条件がそろう時間を選ぶと見やすい見込みです。"
-        : current.score >= 30
-          ? "今夜は条件が伸びにくく、短時間の確認向きです。"
-          : "今夜は夜間飛翔が控えめになりやすい条件です。";
+const goodConditionsGuide = "今夜は観察条件が良い寄りです。";
+const guideByLabel = {
+  とても高い: goodConditionsGuide,
+  高い: goodConditionsGuide,
+  普通: "今夜は条件がそろう時間を選ぶと見やすい見込みです。",
+  低い: "今夜は条件が伸びにくく、短時間の確認向きです。",
+  とても低い: "今夜は夜間飛翔が控えめになりやすい条件です。",
+} satisfies Record<NonNullable<Forecast["label"]>, string>;
 
-  if (!condition) {
-    return `${scoreGuide}指数は観察条件の目安で、出現数を保証するものではありません。`;
+function createNightGuide(current: Forecast) {
+  const condition = current.condition;
+  if (current.label === null || !condition) {
+    return "必要な気象データがそろっていないため、今夜の観察条件は判定できません。";
   }
+  const scoreGuide = guideByLabel[current.label];
 
   const weatherGuide =
-    condition.temperature >= 22 && condition.humidity >= 65
-      ? "気温と湿度は十分にあり、飛翔条件を支えています。"
+    condition.temperature >= 22
+      ? "気温は比較的高めです。好適な気温や湿度は虫の種類や時期によって異なります。"
       : condition.temperature < 18
         ? "気温が低めで、他の条件が良くても活動は抑えられやすいです。"
         : condition.humidity < 50
           ? "湿度が低めで、乾いた夜として見ます。"
-          : "気温と湿度は中程度で、風や雨の影響も合わせて見る夜です。";
+          : "気温と湿度に加え、風や雨の影響も合わせて見る夜です。";
 
   const windRainGuide =
-    condition.precipitation > 0.5
+    condition.precipitation >= 0.5
       ? "観察時間帯の雨が減点要素です。"
-      : condition.windSpeed >= 5 || condition.windGust >= 8
+      : condition.windSpeed > 4 || condition.windGust > 7
         ? "風または突風が強めで、飛翔を妨げる可能性があります。"
         : "雨と風の影響は大きくありません。";
 
@@ -236,8 +237,8 @@ function createNightGuide(
     condition.moonIllumination >= 0.6 &&
     condition.moonAltitudeDeg > 0 &&
     condition.cloudCover < 60
-      ? "月明かりはやや強く、明るさの影響を受ける条件です。"
-      : "月明かりの影響は限定的に見ています。";
+      ? "月明かりによって、灯火に集まる虫の見つけやすさが変わる可能性があります。"
+      : "月明かりの補正は限定的です。";
 
   return `${scoreGuide}${weatherGuide}${windRainGuide}${moonGuide}指数は広域エリアの目安で、具体的な観察地点を示すものではありません。`;
 }

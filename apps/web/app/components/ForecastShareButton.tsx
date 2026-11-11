@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@astryxdesign/core/Button";
 import { useState } from "react";
 
 type ForecastShareButtonProps = {
@@ -40,16 +41,15 @@ export function ForecastShareButton({
   }
 
   return (
-    <button
-      className="forecast-share-button"
+    <Button
+      label={
+        status === "copied"
+          ? "コピー済み"
+          : status === "failed"
+            ? "コピー不可"
+            : "共有"
+      }
       onClick={handleClick}
-      type="button"
-    >
-      {status === "copied"
-        ? "コピー済み"
-        : status === "failed"
-          ? "コピー不可"
-          : "共有"}
-    </button>
+    />
   );
 }

@@ -10,6 +10,7 @@ type AreaTuple = [
   longitude: number,
   seasonScore: number,
   habitatScore: number,
+  monthlyMeanTemperaturesC: CoarseArea["monthlyMeanTemperaturesC"],
 ];
 
 const areaData: AreaTuple[] = [
@@ -23,6 +24,7 @@ const areaData: AreaTuple[] = [
     141.35,
     0.72,
     0.82,
+    [-4, -3, 0, 7, 12, 16, 20, 22, 18, 11, 5, -1],
   ],
   [
     "hokkaido-dounan-20km-01",
@@ -34,6 +36,7 @@ const areaData: AreaTuple[] = [
     140.73,
     0.74,
     0.82,
+    [-3, -2, 1, 7, 12, 16, 20, 22, 18, 12, 6, -1],
   ],
   [
     "hokkaido-douhoku-20km-01",
@@ -45,6 +48,7 @@ const areaData: AreaTuple[] = [
     142.36,
     0.68,
     0.85,
+    [-8, -7, -2, 5, 12, 16, 20, 21, 16, 9, 2, -5],
   ],
   [
     "hokkaido-doutou-20km-01",
@@ -56,6 +60,7 @@ const areaData: AreaTuple[] = [
     143.2,
     0.69,
     0.86,
+    [-9, -8, -3, 3, 10, 14, 17, 18, 14, 8, 1, -6],
   ],
   [
     "aomori-tsugaru-20km-01",
@@ -67,6 +72,7 @@ const areaData: AreaTuple[] = [
     140.47,
     0.76,
     0.82,
+    [-2, -2, 2, 8, 14, 18, 22, 23, 19, 12, 6, 0],
   ],
   [
     "aomori-nanbu-20km-01",
@@ -78,6 +84,7 @@ const areaData: AreaTuple[] = [
     141.49,
     0.75,
     0.82,
+    [-1, 0, 3, 9, 14, 17, 21, 23, 19, 14, 7, 2],
   ],
   [
     "iwate-nairiku-20km-01",
@@ -89,6 +96,7 @@ const areaData: AreaTuple[] = [
     141.15,
     0.77,
     0.84,
+    [-3, -2, 1, 7, 13, 18, 21, 22, 18, 11, 5, 0],
   ],
   [
     "iwate-sanriku-20km-01",
@@ -100,6 +108,7 @@ const areaData: AreaTuple[] = [
     141.95,
     0.76,
     0.82,
+    [1, 1, 4, 9, 14, 17, 20, 22, 19, 14, 8, 3],
   ],
   [
     "miyagi-sendai-20km-01",
@@ -111,6 +120,7 @@ const areaData: AreaTuple[] = [
     140.87,
     0.8,
     0.76,
+    [1, 2, 5, 10, 15, 19, 22, 24, 21, 15, 9, 4],
   ],
   [
     "miyagi-north-20km-01",
@@ -122,6 +132,7 @@ const areaData: AreaTuple[] = [
     140.95,
     0.79,
     0.8,
+    [0, 1, 4, 9, 15, 19, 22, 24, 20, 14, 8, 2],
   ],
   [
     "akita-coast-20km-01",
@@ -133,6 +144,7 @@ const areaData: AreaTuple[] = [
     140.1,
     0.77,
     0.82,
+    [0, 0, 3, 9, 15, 19, 23, 24, 20, 14, 7, 2],
   ],
   [
     "akita-inland-20km-01",
@@ -144,6 +156,7 @@ const areaData: AreaTuple[] = [
     140.56,
     0.76,
     0.85,
+    [-2, -1, 2, 8, 14, 19, 23, 24, 19, 13, 6, 1],
   ],
   [
     "yamagata-murayama-20km-01",
@@ -155,6 +168,7 @@ const areaData: AreaTuple[] = [
     140.36,
     0.79,
     0.83,
+    [0, 0, 4, 10, 16, 20, 24, 25, 21, 14, 8, 2],
   ],
   [
     "yamagata-shonai-20km-01",
@@ -166,6 +180,7 @@ const areaData: AreaTuple[] = [
     139.84,
     0.8,
     0.82,
+    [1, 2, 4, 10, 15, 20, 23, 25, 21, 15, 9, 4],
   ],
   [
     "fukushima-aizu-20km-01",
@@ -177,6 +192,7 @@ const areaData: AreaTuple[] = [
     139.93,
     0.8,
     0.84,
+    [-1, -1, 3, 9, 15, 20, 23, 24, 20, 13, 7, 2],
   ],
   [
     "fukushima-nakadori-20km-01",
@@ -188,6 +204,7 @@ const areaData: AreaTuple[] = [
     140.47,
     0.82,
     0.8,
+    [1, 2, 5, 11, 17, 20, 24, 25, 21, 15, 9, 4],
   ],
   [
     "fukushima-hamadori-20km-01",
@@ -199,6 +216,7 @@ const areaData: AreaTuple[] = [
     140.89,
     0.84,
     0.78,
+    [4, 4, 7, 12, 16, 19, 23, 25, 22, 17, 12, 7],
   ],
   [
     "ibaraki-north-20km-01",
@@ -210,6 +228,7 @@ const areaData: AreaTuple[] = [
     140.45,
     0.86,
     0.78,
+    [3, 4, 7, 12, 17, 20, 24, 26, 22, 16, 10, 5],
   ],
   [
     "ibaraki-south-20km-01",
@@ -221,6 +240,7 @@ const areaData: AreaTuple[] = [
     140.2,
     0.87,
     0.76,
+    [4, 5, 8, 13, 18, 21, 25, 26, 23, 17, 11, 6],
   ],
   [
     "tochigi-north-20km-01",
@@ -232,6 +252,7 @@ const areaData: AreaTuple[] = [
     139.72,
     0.83,
     0.85,
+    [0, 1, 4, 9, 15, 18, 22, 23, 19, 14, 8, 2],
   ],
   [
     "tochigi-south-20km-01",
@@ -243,6 +264,7 @@ const areaData: AreaTuple[] = [
     139.88,
     0.86,
     0.78,
+    [2, 3, 7, 12, 17, 21, 24, 25, 22, 16, 10, 4],
   ],
   [
     "gunma-north-20km-01",
@@ -254,6 +276,7 @@ const areaData: AreaTuple[] = [
     138.99,
     0.82,
     0.85,
+    [0, 0, 4, 10, 15, 19, 23, 24, 20, 14, 7, 2],
   ],
   [
     "gunma-south-20km-01",
@@ -265,6 +288,7 @@ const areaData: AreaTuple[] = [
     139.06,
     0.86,
     0.79,
+    [3, 4, 7, 13, 18, 22, 25, 26, 22, 17, 11, 6],
   ],
   [
     "saitama-west-20km-01",
@@ -276,6 +300,7 @@ const areaData: AreaTuple[] = [
     139.08,
     0.86,
     0.8,
+    [2, 4, 7, 13, 18, 21, 25, 26, 22, 16, 10, 5],
   ],
   [
     "saitama-east-20km-01",
@@ -287,6 +312,7 @@ const areaData: AreaTuple[] = [
     139.65,
     0.86,
     0.72,
+    [4, 5, 9, 14, 19, 22, 26, 27, 23, 18, 12, 6],
   ],
   [
     "chiba-north-20km-01",
@@ -298,6 +324,7 @@ const areaData: AreaTuple[] = [
     140.12,
     0.88,
     0.74,
+    [5, 6, 9, 14, 19, 22, 25, 27, 23, 18, 12, 7],
   ],
   [
     "chiba-south-20km-01",
@@ -309,6 +336,7 @@ const areaData: AreaTuple[] = [
     139.9,
     0.9,
     0.8,
+    [6, 7, 10, 15, 19, 22, 25, 27, 24, 19, 14, 9],
   ],
   [
     "tokyo-tama-20km-01",
@@ -320,6 +348,7 @@ const areaData: AreaTuple[] = [
     139.3,
     0.87,
     0.78,
+    [4, 5, 8, 13, 18, 21, 25, 26, 23, 17, 11, 6],
   ],
   [
     "tokyo-urban-20km-01",
@@ -331,6 +360,7 @@ const areaData: AreaTuple[] = [
     139.76,
     0.87,
     0.66,
+    [6, 6, 9, 14, 19, 22, 25, 27, 23, 18, 13, 8],
   ],
   [
     "tokyo-islands-20km-01",
@@ -342,6 +372,7 @@ const areaData: AreaTuple[] = [
     139.36,
     0.9,
     0.82,
+    [8, 8, 10, 14, 18, 21, 25, 26, 23, 19, 15, 10],
   ],
   [
     "kanagawa-east-20km-01",
@@ -353,6 +384,7 @@ const areaData: AreaTuple[] = [
     139.64,
     0.88,
     0.7,
+    [6, 7, 10, 15, 19, 22, 26, 27, 24, 19, 13, 9],
   ],
   [
     "kanagawa-west-20km-01",
@@ -364,6 +396,7 @@ const areaData: AreaTuple[] = [
     139.16,
     0.88,
     0.8,
+    [5, 6, 9, 14, 18, 21, 25, 26, 23, 18, 13, 8],
   ],
   [
     "niigata-kaetsu-20km-01",
@@ -375,6 +408,7 @@ const areaData: AreaTuple[] = [
     139.02,
     0.81,
     0.8,
+    [2, 2, 6, 11, 17, 21, 25, 26, 22, 16, 10, 5],
   ],
   [
     "niigata-chuetsu-20km-01",
@@ -386,6 +420,7 @@ const areaData: AreaTuple[] = [
     138.85,
     0.8,
     0.84,
+    [2, 2, 5, 11, 17, 21, 25, 26, 22, 16, 10, 4],
   ],
   [
     "niigata-joetsu-sado-20km-01",
@@ -397,6 +432,7 @@ const areaData: AreaTuple[] = [
     138.24,
     0.81,
     0.83,
+    [2, 2, 5, 11, 16, 20, 24, 26, 22, 16, 10, 5],
   ],
   [
     "toyama-east-20km-01",
@@ -408,6 +444,7 @@ const areaData: AreaTuple[] = [
     137.21,
     0.83,
     0.84,
+    [2, 2, 6, 11, 17, 21, 25, 26, 22, 16, 10, 5],
   ],
   [
     "toyama-west-20km-01",
@@ -419,6 +456,7 @@ const areaData: AreaTuple[] = [
     136.96,
     0.83,
     0.82,
+    [2, 3, 6, 11, 17, 21, 25, 26, 22, 16, 11, 5],
   ],
   [
     "ishikawa-kaga-20km-01",
@@ -430,6 +468,7 @@ const areaData: AreaTuple[] = [
     136.65,
     0.84,
     0.8,
+    [3, 3, 6, 12, 17, 21, 25, 26, 22, 16, 11, 5],
   ],
   [
     "ishikawa-noto-20km-01",
@@ -441,6 +480,7 @@ const areaData: AreaTuple[] = [
     136.96,
     0.82,
     0.84,
+    [3, 3, 6, 11, 16, 20, 25, 26, 22, 16, 11, 5],
   ],
   [
     "fukui-reihoku-20km-01",
@@ -452,6 +492,7 @@ const areaData: AreaTuple[] = [
     136.22,
     0.84,
     0.82,
+    [3, 4, 7, 13, 18, 22, 26, 27, 23, 17, 11, 6],
   ],
   [
     "fukui-reinan-20km-01",
@@ -463,6 +504,7 @@ const areaData: AreaTuple[] = [
     135.93,
     0.85,
     0.82,
+    [4, 5, 8, 13, 18, 22, 26, 27, 23, 18, 12, 7],
   ],
   [
     "yamanashi-kuninaka-20km-01",
@@ -474,6 +516,7 @@ const areaData: AreaTuple[] = [
     138.57,
     0.84,
     0.8,
+    [2, 3, 7, 13, 18, 21, 25, 26, 22, 16, 10, 4],
   ],
   [
     "yamanashi-gunnai-20km-01",
@@ -485,6 +528,7 @@ const areaData: AreaTuple[] = [
     138.77,
     0.83,
     0.82,
+    [-4, -2, 1, 7, 12, 15, 19, 20, 16, 11, 5, -1],
   ],
   [
     "nagano-north-20km-01",
@@ -496,6 +540,7 @@ const areaData: AreaTuple[] = [
     138.19,
     0.78,
     0.85,
+    [-3, -3, 1, 8, 14, 17, 21, 22, 18, 12, 6, 0],
   ],
   [
     "nagano-east-20km-01",
@@ -507,6 +552,7 @@ const areaData: AreaTuple[] = [
     138.47,
     0.8,
     0.83,
+    [-2, -2, 2, 8, 14, 18, 22, 22, 18, 12, 6, 0],
   ],
   [
     "nagano-central-20km-01",
@@ -518,6 +564,7 @@ const areaData: AreaTuple[] = [
     137.97,
     0.79,
     0.86,
+    [-1, 0, 4, 11, 16, 20, 24, 25, 20, 14, 8, 2],
   ],
   [
     "nagano-south-20km-01",
@@ -529,6 +576,7 @@ const areaData: AreaTuple[] = [
     138.05,
     0.81,
     0.84,
+    [-1, 0, 4, 10, 15, 19, 23, 24, 19, 13, 7, 2],
   ],
   [
     "gifu-hida-20km-01",
@@ -540,6 +588,7 @@ const areaData: AreaTuple[] = [
     137.25,
     0.82,
     0.86,
+    [-3, -2, 2, 8, 14, 18, 22, 23, 19, 12, 6, 0],
   ],
   [
     "gifu-mino-20km-01",
@@ -551,6 +600,7 @@ const areaData: AreaTuple[] = [
     136.76,
     0.87,
     0.81,
+    [4, 5, 9, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "shizuoka-izu-20km-01",
@@ -562,6 +612,7 @@ const areaData: AreaTuple[] = [
     138.93,
     0.91,
     0.83,
+    [7, 7, 10, 14, 18, 21, 25, 26, 23, 19, 14, 9],
   ],
   [
     "shizuoka-east-20km-01",
@@ -573,6 +624,7 @@ const areaData: AreaTuple[] = [
     138.68,
     0.89,
     0.79,
+    [6, 7, 10, 15, 19, 22, 26, 27, 24, 19, 14, 9],
   ],
   [
     "shizuoka-central-20km-01",
@@ -584,6 +636,7 @@ const areaData: AreaTuple[] = [
     138.38,
     0.9,
     0.78,
+    [7, 8, 11, 15, 19, 22, 26, 27, 24, 19, 14, 9],
   ],
   [
     "shizuoka-west-20km-01",
@@ -595,6 +648,7 @@ const areaData: AreaTuple[] = [
     137.73,
     0.9,
     0.8,
+    [6, 7, 10, 15, 19, 22, 26, 27, 25, 19, 14, 9],
   ],
   [
     "aichi-owari-20km-01",
@@ -606,6 +660,7 @@ const areaData: AreaTuple[] = [
     136.91,
     0.89,
     0.72,
+    [5, 5, 9, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "aichi-mikawa-20km-01",
@@ -617,6 +672,7 @@ const areaData: AreaTuple[] = [
     137.39,
     0.89,
     0.76,
+    [6, 6, 9, 15, 19, 22, 26, 27, 24, 19, 13, 8],
   ],
   [
     "mie-north-20km-01",
@@ -628,6 +684,7 @@ const areaData: AreaTuple[] = [
     136.51,
     0.9,
     0.78,
+    [5, 5, 9, 14, 19, 22, 26, 27, 24, 18, 12, 7],
   ],
   [
     "mie-south-20km-01",
@@ -639,6 +696,7 @@ const areaData: AreaTuple[] = [
     136.2,
     0.91,
     0.85,
+    [5, 6, 9, 14, 18, 21, 25, 26, 23, 18, 12, 7],
   ],
   [
     "shiga-north-20km-01",
@@ -650,6 +708,7 @@ const areaData: AreaTuple[] = [
     136.28,
     0.86,
     0.83,
+    [3, 4, 7, 12, 18, 22, 26, 27, 23, 17, 11, 6],
   ],
   [
     "shiga-south-20km-01",
@@ -661,6 +720,7 @@ const areaData: AreaTuple[] = [
     135.87,
     0.87,
     0.8,
+    [4, 5, 8, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "kyoto-south-20km-01",
@@ -672,6 +732,7 @@ const areaData: AreaTuple[] = [
     135.76,
     0.87,
     0.74,
+    [4, 5, 8, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "kyoto-north-20km-01",
@@ -683,6 +744,7 @@ const areaData: AreaTuple[] = [
     135.33,
     0.85,
     0.83,
+    [4, 4, 7, 13, 18, 21, 26, 27, 23, 17, 12, 6],
   ],
   [
     "osaka-north-20km-01",
@@ -694,6 +756,7 @@ const areaData: AreaTuple[] = [
     135.55,
     0.88,
     0.68,
+    [4, 5, 8, 13, 18, 22, 26, 27, 23, 17, 12, 6],
   ],
   [
     "osaka-south-20km-01",
@@ -705,6 +768,7 @@ const areaData: AreaTuple[] = [
     135.42,
     0.88,
     0.7,
+    [5, 6, 9, 14, 19, 23, 27, 28, 24, 18, 13, 8],
   ],
   [
     "hyogo-south-20km-01",
@@ -716,6 +780,7 @@ const areaData: AreaTuple[] = [
     135.19,
     0.87,
     0.76,
+    [5, 5, 9, 14, 19, 23, 26, 28, 24, 19, 13, 8],
   ],
   [
     "hyogo-tajima-20km-01",
@@ -727,6 +792,7 @@ const areaData: AreaTuple[] = [
     134.82,
     0.84,
     0.84,
+    [4, 4, 7, 13, 18, 21, 26, 27, 23, 17, 12, 6],
   ],
   [
     "hyogo-awaji-20km-01",
@@ -738,6 +804,7 @@ const areaData: AreaTuple[] = [
     134.9,
     0.89,
     0.78,
+    [6, 6, 9, 14, 19, 22, 27, 28, 24, 19, 13, 8],
   ],
   [
     "nara-north-20km-01",
@@ -749,6 +816,7 @@ const areaData: AreaTuple[] = [
     135.83,
     0.87,
     0.78,
+    [3, 4, 7, 13, 18, 21, 25, 26, 22, 16, 11, 5],
   ],
   [
     "nara-south-20km-01",
@@ -760,6 +828,7 @@ const areaData: AreaTuple[] = [
     135.79,
     0.86,
     0.86,
+    [0, 0, 4, 9, 14, 18, 22, 23, 19, 13, 8, 2],
   ],
   [
     "wakayama-north-20km-01",
@@ -771,6 +840,7 @@ const areaData: AreaTuple[] = [
     135.17,
     0.9,
     0.8,
+    [6, 7, 10, 15, 20, 23, 27, 28, 25, 19, 14, 9],
   ],
   [
     "wakayama-south-20km-01",
@@ -782,6 +852,7 @@ const areaData: AreaTuple[] = [
     135.99,
     0.91,
     0.86,
+    [8, 8, 11, 16, 19, 22, 26, 27, 25, 20, 15, 10],
   ],
   [
     "tottori-east-20km-01",
@@ -793,6 +864,7 @@ const areaData: AreaTuple[] = [
     134.24,
     0.84,
     0.82,
+    [4, 4, 7, 13, 18, 21, 26, 27, 22, 17, 12, 7],
   ],
   [
     "tottori-west-20km-01",
@@ -804,6 +876,7 @@ const areaData: AreaTuple[] = [
     133.33,
     0.84,
     0.83,
+    [5, 5, 8, 13, 18, 22, 26, 27, 23, 18, 12, 7],
   ],
   [
     "shimane-east-20km-01",
@@ -815,6 +888,7 @@ const areaData: AreaTuple[] = [
     133.05,
     0.85,
     0.82,
+    [5, 5, 8, 13, 18, 22, 26, 27, 23, 17, 12, 7],
   ],
   [
     "shimane-west-oki-20km-01",
@@ -826,6 +900,7 @@ const areaData: AreaTuple[] = [
     132.08,
     0.85,
     0.84,
+    [4, 4, 7, 12, 17, 20, 25, 26, 21, 16, 11, 6],
   ],
   [
     "okayama-south-20km-01",
@@ -837,6 +912,7 @@ const areaData: AreaTuple[] = [
     133.93,
     0.88,
     0.76,
+    [5, 5, 9, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "okayama-north-20km-01",
@@ -848,6 +924,7 @@ const areaData: AreaTuple[] = [
     134.0,
     0.86,
     0.84,
+    [2, 3, 6, 12, 17, 21, 25, 26, 22, 16, 9, 4],
   ],
   [
     "hiroshima-west-20km-01",
@@ -859,6 +936,7 @@ const areaData: AreaTuple[] = [
     132.46,
     0.88,
     0.78,
+    [5, 6, 9, 14, 19, 23, 27, 28, 24, 18, 12, 7],
   ],
   [
     "hiroshima-east-north-20km-01",
@@ -870,6 +948,7 @@ const areaData: AreaTuple[] = [
     133.08,
     0.87,
     0.82,
+    [3, 4, 7, 13, 18, 22, 26, 27, 23, 17, 11, 5],
   ],
   [
     "yamaguchi-west-20km-01",
@@ -881,6 +960,7 @@ const areaData: AreaTuple[] = [
     131.47,
     0.89,
     0.82,
+    [4, 5, 9, 13, 18, 22, 26, 27, 23, 17, 12, 6],
   ],
   [
     "yamaguchi-east-20km-01",
@@ -892,6 +972,7 @@ const areaData: AreaTuple[] = [
     131.76,
     0.89,
     0.8,
+    [3, 4, 7, 13, 18, 21, 25, 26, 22, 16, 10, 5],
   ],
   [
     "tokushima-north-20km-01",
@@ -903,6 +984,7 @@ const areaData: AreaTuple[] = [
     134.55,
     0.9,
     0.78,
+    [6, 7, 10, 15, 20, 23, 27, 28, 25, 19, 14, 9],
   ],
   [
     "tokushima-south-20km-01",
@@ -914,6 +996,7 @@ const areaData: AreaTuple[] = [
     134.35,
     0.89,
     0.86,
+    [3, 4, 7, 13, 17, 20, 24, 25, 21, 16, 10, 5],
   ],
   [
     "kagawa-east-20km-01",
@@ -925,6 +1008,7 @@ const areaData: AreaTuple[] = [
     134.04,
     0.89,
     0.76,
+    [5, 6, 9, 14, 19, 23, 27, 28, 24, 18, 13, 8],
   ],
   [
     "kagawa-west-20km-01",
@@ -936,6 +1020,7 @@ const areaData: AreaTuple[] = [
     133.79,
     0.89,
     0.76,
+    [5, 5, 9, 14, 19, 22, 26, 28, 24, 18, 12, 7],
   ],
   [
     "ehime-east-20km-01",
@@ -947,6 +1032,7 @@ const areaData: AreaTuple[] = [
     133.29,
     0.9,
     0.82,
+    [6, 6, 9, 14, 19, 23, 27, 27, 24, 18, 13, 8],
   ],
   [
     "ehime-central-20km-01",
@@ -958,6 +1044,7 @@ const areaData: AreaTuple[] = [
     132.77,
     0.9,
     0.78,
+    [6, 7, 10, 15, 19, 23, 27, 28, 25, 19, 14, 9],
   ],
   [
     "ehime-south-20km-01",
@@ -969,6 +1056,7 @@ const areaData: AreaTuple[] = [
     132.56,
     0.91,
     0.84,
+    [5, 6, 9, 14, 19, 22, 26, 27, 24, 18, 13, 7],
   ],
   [
     "kochi-central-20km-01",
@@ -980,6 +1068,7 @@ const areaData: AreaTuple[] = [
     133.53,
     0.91,
     0.84,
+    [6, 8, 11, 16, 20, 23, 27, 28, 25, 20, 14, 9],
   ],
   [
     "kochi-east-20km-01",
@@ -991,6 +1080,7 @@ const areaData: AreaTuple[] = [
     134.17,
     0.91,
     0.84,
+    [8, 8, 12, 16, 20, 23, 26, 27, 25, 20, 15, 10],
   ],
   [
     "kochi-west-20km-01",
@@ -1002,6 +1092,7 @@ const areaData: AreaTuple[] = [
     132.72,
     0.92,
     0.86,
+    [7, 8, 11, 15, 19, 23, 27, 27, 24, 19, 14, 9],
   ],
   [
     "fukuoka-north-20km-01",
@@ -1013,6 +1104,7 @@ const areaData: AreaTuple[] = [
     130.88,
     0.9,
     0.74,
+    [7, 7, 10, 15, 19, 23, 27, 28, 24, 19, 14, 9],
   ],
   [
     "fukuoka-central-20km-01",
@@ -1024,6 +1116,7 @@ const areaData: AreaTuple[] = [
     130.4,
     0.9,
     0.74,
+    [6, 7, 10, 15, 19, 23, 27, 28, 24, 19, 13, 8],
   ],
   [
     "fukuoka-south-20km-01",
@@ -1035,6 +1128,7 @@ const areaData: AreaTuple[] = [
     130.52,
     0.91,
     0.78,
+    [5, 6, 9, 15, 19, 23, 27, 27, 24, 18, 12, 7],
   ],
   [
     "saga-east-20km-01",
@@ -1046,6 +1140,7 @@ const areaData: AreaTuple[] = [
     130.3,
     0.9,
     0.78,
+    [5, 7, 10, 15, 20, 23, 27, 28, 24, 19, 13, 8],
   ],
   [
     "saga-west-20km-01",
@@ -1057,6 +1152,7 @@ const areaData: AreaTuple[] = [
     129.89,
     0.9,
     0.8,
+    [6, 7, 10, 14, 19, 22, 26, 27, 24, 18, 13, 8],
   ],
   [
     "nagasaki-mainland-20km-01",
@@ -1068,6 +1164,7 @@ const areaData: AreaTuple[] = [
     129.87,
     0.91,
     0.78,
+    [7, 8, 11, 16, 20, 23, 27, 28, 25, 20, 15, 9],
   ],
   [
     "nagasaki-islands-20km-01",
@@ -1079,6 +1176,7 @@ const areaData: AreaTuple[] = [
     129.3,
     0.9,
     0.82,
+    [8, 8, 11, 15, 19, 22, 26, 27, 24, 20, 15, 10],
   ],
   [
     "kumamoto-north-20km-01",
@@ -1090,6 +1188,7 @@ const areaData: AreaTuple[] = [
     130.71,
     0.91,
     0.8,
+    [5, 7, 10, 15, 20, 23, 27, 28, 24, 19, 13, 7],
   ],
   [
     "kumamoto-aso-20km-01",
@@ -1101,6 +1200,7 @@ const areaData: AreaTuple[] = [
     131.12,
     0.89,
     0.86,
+    [2, 3, 7, 12, 17, 20, 24, 24, 21, 15, 9, 4],
   ],
   [
     "kumamoto-south-20km-01",
@@ -1112,6 +1212,7 @@ const areaData: AreaTuple[] = [
     130.64,
     0.91,
     0.84,
+    [6, 7, 10, 15, 20, 23, 27, 27, 24, 19, 13, 7],
   ],
   [
     "oita-north-20km-01",
@@ -1123,6 +1224,7 @@ const areaData: AreaTuple[] = [
     131.34,
     0.9,
     0.8,
+    [5, 5, 9, 14, 18, 22, 26, 27, 23, 17, 12, 7],
   ],
   [
     "oita-central-20km-01",
@@ -1134,6 +1236,7 @@ const areaData: AreaTuple[] = [
     131.61,
     0.9,
     0.78,
+    [5, 6, 9, 14, 19, 22, 26, 27, 24, 18, 13, 8],
   ],
   [
     "oita-south-west-20km-01",
@@ -1145,6 +1248,7 @@ const areaData: AreaTuple[] = [
     131.38,
     0.89,
     0.84,
+    [3, 4, 8, 13, 18, 21, 25, 25, 21, 16, 10, 5],
   ],
   [
     "miyazaki-north-20km-01",
@@ -1156,6 +1260,7 @@ const areaData: AreaTuple[] = [
     131.66,
     0.91,
     0.85,
+    [7, 8, 11, 16, 20, 23, 26, 27, 24, 19, 14, 9],
   ],
   [
     "miyazaki-central-20km-01",
@@ -1167,6 +1272,7 @@ const areaData: AreaTuple[] = [
     131.42,
     0.92,
     0.82,
+    [7, 9, 12, 16, 20, 23, 27, 28, 25, 20, 14, 9],
   ],
   [
     "miyazaki-south-20km-01",
@@ -1178,6 +1284,7 @@ const areaData: AreaTuple[] = [
     131.06,
     0.92,
     0.84,
+    [6, 8, 11, 16, 20, 23, 27, 27, 24, 19, 14, 8],
   ],
   [
     "kagoshima-satsuma-20km-01",
@@ -1189,6 +1296,7 @@ const areaData: AreaTuple[] = [
     130.56,
     0.93,
     0.82,
+    [9, 10, 13, 17, 21, 24, 28, 29, 26, 21, 16, 11],
   ],
   [
     "kagoshima-osumi-20km-01",
@@ -1200,6 +1308,7 @@ const areaData: AreaTuple[] = [
     130.85,
     0.93,
     0.84,
+    [8, 9, 12, 16, 20, 23, 27, 27, 25, 20, 15, 9],
   ],
   [
     "kagoshima-islands-20km-01",
@@ -1211,6 +1320,7 @@ const areaData: AreaTuple[] = [
     130.56,
     0.94,
     0.88,
+    [12, 13, 15, 18, 21, 24, 27, 28, 26, 23, 19, 14],
   ],
   [
     "okinawa-main-20km-01",
@@ -1222,6 +1332,7 @@ const areaData: AreaTuple[] = [
     127.68,
     0.95,
     0.78,
+    [16, 17, 18, 21, 23, 26, 28, 28, 27, 25, 22, 18],
   ],
   [
     "okinawa-north-20km-01",
@@ -1233,6 +1344,7 @@ const areaData: AreaTuple[] = [
     128.03,
     0.95,
     0.88,
+    [17, 17, 19, 21, 24, 27, 29, 29, 28, 25, 22, 18],
   ],
   [
     "okinawa-islands-20km-01",
@@ -1244,6 +1356,7 @@ const areaData: AreaTuple[] = [
     125.28,
     0.95,
     0.88,
+    [18, 19, 20, 23, 25, 28, 29, 29, 28, 26, 23, 20],
   ],
 ];
 
@@ -1258,6 +1371,7 @@ export const areaFixtures: CoarseArea[] = areaData.map(
     longitude,
     seasonScore,
     habitatScore,
+    monthlyMeanTemperaturesC,
   ]) => ({
     id,
     name,
@@ -1271,5 +1385,6 @@ export const areaFixtures: CoarseArea[] = areaData.map(
     locationPolicy: "no_points",
     seasonScore,
     habitatScore,
+    monthlyMeanTemperaturesC,
   }),
 );

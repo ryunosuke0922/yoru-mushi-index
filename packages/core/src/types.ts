@@ -1,3 +1,5 @@
+import type { RegionalSeason } from "./season";
+
 export type WeatherHour = {
   time: string;
   temperature: number;
@@ -14,6 +16,7 @@ export type MoonCondition = {
 };
 
 export type AreaCondition = {
+  season: RegionalSeason;
   seasonScore: number;
   habitatScore: number;
   recentRainMm24h: number;

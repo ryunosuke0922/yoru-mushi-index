@@ -5,21 +5,18 @@ import {
   moonEffect,
   scoreLabel,
 } from "@yoru-mushi-index/core";
-import type { WeatherHour } from "@yoru-mushi-index/core";
-import { recentRainMm24h } from "@yoru-mushi-index/weather";
-import { addDays } from "./format";
+import type {
+  AreaCondition,
+  HourlyScore,
+  WeatherHour,
+} from "@yoru-mushi-index/core";
+import { recentRainMm24h, type WeatherSample } from "@yoru-mushi-index/weather";
 
 const targetHours = new Set(["19", "20", "21", "22", "23"]);
+const hourMs = 60 * 60 * 1000;
 
-type BaseAreaCondition = {
-  seasonScore: number;
-  habitatScore: number;
-};
-
-export type ForecastHourlyScore = WeatherHour & {
-  score: number;
-  label: ReturnType<typeof scoreLabel>;
-  moonEffect: ReturnType<typeof moonEffect>;
+export type ForecastHourlyScore = HourlyScore & {
+  intervalEnd: string;
   moonIllumination: number;
   moonPhase: number;
   moonAltitudeDeg: number;
@@ -27,41 +24,85 @@ export type ForecastHourlyScore = WeatherHour & {
 };
 
 export function buildHourlyScores(
-  weatherHours: WeatherHour[],
+  weatherHours: WeatherSample[],
   area: CoarseArea,
-  baseAreaCondition: BaseAreaCondition,
+  baseAreaCondition: Omit<AreaCondition, "recentRainMm24h">,
   date: string,
 ): ForecastHourlyScore[] {
-  return weatherHours
-    .filter(
-      (hour) =>
-        hour.time.slice(0, 10) === date &&
-        targetHours.has(hour.time.slice(11, 13)),
-    )
-    .map((weather) => {
-      const moon = moonConditionAt(
-        jstDateFromOpenMeteoTime(weather.time),
-        area.latitude,
-        area.longitude,
-      );
-      const recentRain = recentRainMm24h(weatherHours, weather.time);
-      const areaCondition = {
-        ...baseAreaCondition,
-        recentRainMm24h: recentRain,
-      };
-      const score = calculateNightInsectScore(weather, moon, areaCondition);
+  const weatherByTime = new Map<number, WeatherSample | null>();
+  for (const weather of weatherHours) {
+    const timeMs = jstDateFromOpenMeteoTime(weather.time).getTime();
+    if (Number.isFinite(timeMs)) {
+      weatherByTime.set(timeMs, weatherByTime.has(timeMs) ? null : weather);
+    }
+  }
 
-      return {
-        ...weather,
-        score,
-        label: scoreLabel(score),
-        moonEffect: moonEffect(moon, weather.cloudCover),
-        moonIllumination: moon.illumination,
-        moonPhase: moon.phase,
-        moonAltitudeDeg: moon.altitudeDeg,
-        recentRainMm24h: recentRain,
-      };
+  const hourly: ForecastHourlyScore[] = [];
+  for (const weather of weatherHours) {
+    if (
+      weather.time.slice(0, 10) !== date ||
+      !targetHours.has(weather.time.slice(11, 13))
+    ) {
+      continue;
+    }
+
+    const time = jstDateFromOpenMeteoTime(weather.time);
+    const timeMs = time.getTime();
+    const nextHour = weatherByTime.get(timeMs + hourMs);
+    if (
+      weatherByTime.get(timeMs) !== weather ||
+      !nextHour ||
+      weather.temperature === null ||
+      weather.humidity === null ||
+      weather.windSpeed === null ||
+      weather.cloudCover === null ||
+      nextHour.precipitation === null ||
+      nextHour.windGust === null
+    ) {
+      continue;
+    }
+
+    const recentRain = recentRainMm24h(weatherHours, weather.time);
+    if (recentRain === null) {
+      continue;
+    }
+
+    // Rain and gusts at t+1 describe the preceding interval [t, t+1].
+    // Temperature, humidity, wind speed, clouds, and moon remain at t.
+    const intervalWeather: WeatherHour = {
+      time: weather.time,
+      temperature: weather.temperature,
+      humidity: weather.humidity,
+      windSpeed: weather.windSpeed,
+      cloudCover: weather.cloudCover,
+      precipitation: nextHour.precipitation,
+      windGust: nextHour.windGust,
+    };
+    const moon = moonConditionAt(time, area.latitude, area.longitude);
+    const areaCondition = {
+      ...baseAreaCondition,
+      recentRainMm24h: recentRain,
+    };
+    const score = calculateNightInsectScore(
+      intervalWeather,
+      moon,
+      areaCondition,
+    );
+
+    hourly.push({
+      ...intervalWeather,
+      intervalEnd: nextHour.time,
+      score,
+      label: scoreLabel(score),
+      moonEffect: moonEffect(moon, weather.cloudCover),
+      moonIllumination: moon.illumination,
+      moonPhase: moon.phase,
+      moonAltitudeDeg: moon.altitudeDeg,
+      recentRainMm24h: recentRain,
     });
+  }
+
+  return hourly;
 }
 
 export function findBestHour(
@@ -78,15 +119,13 @@ export function findBestHour(
 }
 
 export function formatBestTime(bestHour: ForecastHourlyScore) {
-  const startHour = Number(bestHour.time.slice(11, 13));
-  const endHour = (startHour + 1) % 24;
-
-  return `${bestHour.time.slice(11, 16)}-${String(endHour).padStart(2, "0")}:00`;
+  return `${bestHour.time.slice(11, 16)}-${bestHour.intervalEnd.slice(11, 16)}`;
 }
 
 export function toForecastCondition(bestHour: ForecastHourlyScore) {
   return {
     time: bestHour.time,
+    intervalEnd: bestHour.intervalEnd,
     temperature: bestHour.temperature,
     humidity: bestHour.humidity,
     precipitation: bestHour.precipitation,
@@ -98,35 +137,6 @@ export function toForecastCondition(bestHour: ForecastHourlyScore) {
     moonAltitudeDeg: bestHour.moonAltitudeDeg,
     recentRainMm24h: bestHour.recentRainMm24h,
   };
-}
-
-export function fallbackWeatherHours(date: string): WeatherHour[] {
-  return fallbackWeatherHoursRange(addDays(date, -1), date);
-}
-
-export function fallbackWeatherHoursRange(
-  startDate: string,
-  endDate: string,
-): WeatherHour[] {
-  const dates: string[] = [];
-  let date = startDate;
-
-  while (date <= endDate) {
-    dates.push(date);
-    date = addDays(date, 1);
-  }
-
-  return dates.flatMap((dateKey) =>
-    Array.from({ length: 24 }, (_, hour) => ({
-      time: `${dateKey}T${String(hour).padStart(2, "0")}:00`,
-      temperature: hour >= 19 && hour <= 23 ? 23.5 - (hour - 19) * 0.4 : 22,
-      humidity: hour >= 19 && hour <= 23 ? 76 : 68,
-      precipitation: 0,
-      windSpeed: hour >= 19 && hour <= 23 ? 2 : 3,
-      windGust: hour >= 19 && hour <= 23 ? 4 : 6,
-      cloudCover: 72,
-    })),
-  );
 }
 
 export function jstDateFromOpenMeteoTime(time: string) {

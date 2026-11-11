@@ -1,10 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchOpenMeteoForecast } from "@yoru-mushi-index/weather";
 import { expectNoCoordinates } from "../../testUtils";
 import { GET } from "./route";
 
 const weatherHours = vi.hoisted(() =>
-  Array.from({ length: 8 }, (_, dayIndex) => {
+  Array.from({ length: 9 }, (_, dayIndex) => {
     const date = `2026-06-${String(4 + dayIndex).padStart(2, "0")}`;
 
     return Array.from({ length: 24 }, (_, hour) => ({
@@ -26,6 +26,10 @@ vi.mock("@yoru-mushi-index/weather", () => ({
 }));
 
 describe("GET /api/forecast/week", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("週間レスポンスに座標を含めない", async () => {
     const response = await GET(
       new Request(
@@ -41,7 +45,33 @@ describe("GET /api/forecast/week", () => {
       precision: "coarse_area",
     });
     expect(body.forecasts).toHaveLength(7);
+    expect(
+      body.forecasts.every(
+        (forecast: { status: string }) => forecast.status === "available",
+      ),
+    ).toBe(true);
     expect(fetchOpenMeteoForecast).toHaveBeenCalledTimes(1);
+    expectNoCoordinates(body);
+  });
+
+  it("全日取得できない場合は欠測を維持して 503 を返す", async () => {
+    vi.mocked(fetchOpenMeteoForecast).mockRejectedValueOnce(
+      new Error("offline"),
+    );
+    const response = await GET(
+      new Request(
+        "http://localhost/api/forecast/week?areaId=tokyo-tama-20km-01&date=2026-06-05",
+      ),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(body.forecasts).toHaveLength(7);
+    for (const forecast of body.forecasts) {
+      expect(forecast.status).toBe("unavailable");
+      expect(forecast.score).toBeNull();
+      expect(forecast.condition).toBeNull();
+    }
     expectNoCoordinates(body);
   });
 

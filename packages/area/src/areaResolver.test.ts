@@ -12,6 +12,21 @@ describe("area fixtures", () => {
     expect(areaFixtures).toHaveLength(112);
   });
 
+  it("全エリアに12か月の気候値があり、離島は同じ都県の本土と区別される", () => {
+    for (const area of areaFixtures) {
+      expect(area.monthlyMeanTemperaturesC).toHaveLength(12);
+      expect(area.monthlyMeanTemperaturesC.every(Number.isFinite)).toBe(true);
+    }
+    const january = (id: string) =>
+      findAreaById(id)!.monthlyMeanTemperaturesC[0];
+    expect(january("tokyo-islands-20km-01")).toBeGreaterThan(
+      january("tokyo-tama-20km-01"),
+    );
+    expect(january("kagoshima-islands-20km-01")).toBeGreaterThan(
+      january("kagoshima-satsuma-20km-01"),
+    );
+  });
+
   it("エリアIDが重複していない", () => {
     const ids = areaFixtures.map((area) => area.id);
 
