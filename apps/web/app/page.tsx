@@ -10,21 +10,36 @@ import {
   siteConfig,
 } from "./lib/seo";
 
+const title = "今夜の昆虫観察予報";
+const description =
+  "全国のエリア別に、蛾・甲虫などの夜虫指数と観察に向いた時間を掲載。気温、雨、風、月明かり、地域の季節をもとに、今夜から7日間の条件を確認できます。";
+
 export const metadata: Metadata = createPageMetadata({
-  description:
-    "全国の地方別サブエリアから、今夜の夜間昆虫の飛翔条件を確認できます。",
+  title,
+  description,
   path: "/",
 });
 
 export default function Home() {
   const pageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: siteConfig.name,
-    url: absoluteUrl("/"),
-    description: siteConfig.description,
-    inLanguage: "ja",
-    mainEntity: createAreaItemListJsonLd(areaFixtures),
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": absoluteUrl("/#website"),
+        name: siteConfig.name,
+        url: absoluteUrl("/"),
+      },
+      {
+        "@type": "CollectionPage",
+        name: title,
+        url: absoluteUrl("/"),
+        isPartOf: { "@id": absoluteUrl("/#website") },
+        description,
+        inLanguage: "ja",
+        mainEntity: createAreaItemListJsonLd(areaFixtures),
+      },
+    ],
   };
 
   return (

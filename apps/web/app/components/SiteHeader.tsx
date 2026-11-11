@@ -18,7 +18,7 @@ export function SiteHeader() {
         {PRIMARY_NAV_LINKS.map((link) => {
           const isCurrent =
             link.href === "/"
-              ? pathname === "/" || pathname === "/areas"
+              ? pathname === "/"
               : pathname === link.href || pathname.startsWith(`${link.href}/`);
 
           return (

@@ -17,9 +17,9 @@ export function AreaSelector() {
 
   return (
     <>
-      <PageIntro title="エリア別予報">
+      <PageIntro title="今夜の昆虫観察予報">
         <p className="page-intro-description">
-          エリアを選ぶと、今夜の夜虫指数と観察に向いた時間を確認できます。
+          夜虫指数は、蛾や甲虫などが夜に飛びやすい条件を、気象と月明かり、地域の季節から推定します。エリアを選ぶと、今夜の観察に向いた時間と7日間の予報を確認できます。
         </p>
       </PageIntro>
       <nav className="area-jump-nav" aria-label="エリア一覧の移動">

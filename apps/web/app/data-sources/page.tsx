@@ -78,7 +78,7 @@ export default function DataSourcesPage() {
           <li>代表座標: API や画面には表示しない内部計算用の値</li>
         </ul>
 
-        <h2>公開データの利用</h2>
+        <h2 id="data-usage">公開データの利用</h2>
         <p>
           夜虫指数の画面と公開 API
           で表示される指数データを利用する場合は、出典として「夜虫指数」または

@@ -91,5 +91,7 @@ curl -I https://yorumushi.com/area/tokyo-tama-20km-01
 - `https://yorumushi.com/` が 200 を返す
 - `https://www.yorumushi.com/` が `https://yorumushi.com/` へ redirect する
 - canonical / OG / sitemap / robots が `https://yorumushi.com` を指す
+- サイトマップは正規URLの一覧とし、ビルド日時を一律の更新日時として配信しない
+- 公開APIはデータ取得用とし、検索結果には地域ページを表示するためJSONに `X-Robots-Tag: noindex` を付ける
 - API レスポンスに `latitude` / `longitude` が含まれない
 - Google Analytics タグが出力される

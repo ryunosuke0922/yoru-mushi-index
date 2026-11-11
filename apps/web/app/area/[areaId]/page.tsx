@@ -1,5 +1,6 @@
 import { Button } from "@astryxdesign/core/Button";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { findAreaById, findNearbyAreas } from "@yoru-mushi-index/area";
@@ -26,8 +27,6 @@ type AreaPageProps = {
   }>;
 };
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({
   params,
 }: AreaPageProps): Promise<Metadata> {
@@ -47,8 +46,8 @@ export async function generateMetadata({
   }
 
   return createPageMetadata({
-    title: `${area.name}の夜虫指数`,
-    description: `${area.name}の今夜の夜間昆虫の飛翔条件を、気象条件と月明かりから推定します。`,
+    title: `${area.name}の昆虫観察予報`,
+    description: `${area.name}（${area.aliases.slice(0, 4).join("・")}）で蛾や甲虫を観察するなら何時ごろか。今夜の夜虫指数、時間帯ごとの指数、雨・風・月明かりの条件と7日間の予報を確認できます。`,
     path: `/area/${area.id}`,
   });
 }
@@ -61,6 +60,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
     notFound();
   }
 
+  await connection();
   const today = todayKey();
   const forecasts = await buildWeeklyForecast(areaId, today);
   const current = forecasts[0];
@@ -71,6 +71,11 @@ export default async function AreaPage({ params }: AreaPageProps) {
   }
 
   const shareUrl = absoluteUrl(`/area/${area.id}`);
+  const weekApiPath = `/api/forecast/week?${new URLSearchParams({ areaId: area.id, date: today })}`;
+  const summary = forecastSummary(current);
+  const hours = forecasts.flatMap((forecast) => forecast.hourly);
+  const firstHour = hours[0];
+  const lastHour = hours.at(-1);
   const shareText = [
     current.score === null
       ? `${current.area.name}の夜虫指数は、現在データを取得できません。`
@@ -93,36 +98,44 @@ export default async function AreaPage({ params }: AreaPageProps) {
         "@type": "WebPage",
         name: `${area.name}の夜虫指数`,
         url: absoluteUrl(`/area/${area.id}`),
-        description: `${area.name}の今夜の夜間昆虫の飛翔条件を、気象条件と月明かりから推定します。`,
+        description: summary,
         inLanguage: "ja",
-        mainEntity: {
-          "@type": "Dataset",
-          name: `${area.name}の夜虫指数`,
-          description: `${area.name}を対象に、Open-Meteo の気象予報、SunCalc の月条件、季節と広域環境の補正から、夜間昆虫が飛翔しやすい条件を日別に推定した指数データです。具体的な観察地点、街灯、採集地、生息地、内部計算用の代表座標は含みません。`,
-          creator: {
-            "@type": "Person",
-            name: "ryuuuu092",
-            sameAs: [siteConfig.xUrl, siteConfig.githubUrl],
-          },
-          license: {
-            "@type": "CreativeWork",
-            name: "夜虫指数 公開データ利用条件",
-            url: absoluteUrl("/data-sources"),
-          },
-          variableMeasured: [
-            "気温",
-            "湿度",
-            "風速",
-            "降水量",
-            "雲量",
-            "月の照明割合",
-            "月相",
-          ],
-          spatialCoverage: {
-            "@type": "Place",
-            name: area.name,
-          },
-        },
+        mainEntity:
+          firstHour && lastHour
+            ? {
+                "@type": "Dataset",
+                name: `${area.name}の夜虫指数`,
+                description: `${area.name}を対象に、Open-Meteo の気象予報、SunCalc の月条件、季節と広域環境の補正から、夜間昆虫が飛翔しやすい条件を日別に推定した指数データです。具体的な観察地点、街灯、採集地、生息地、内部計算用の代表座標は含みません。`,
+                creator: {
+                  "@type": "Person",
+                  name: "ryuuuu092",
+                  sameAs: [siteConfig.xUrl, siteConfig.githubUrl],
+                },
+                url: shareUrl,
+                license: absoluteUrl("/data-sources#data-usage"),
+                temporalCoverage: `${firstHour.time}:00+09:00/${lastHour.intervalEnd}:00+09:00`,
+                measurementTechnique: absoluteUrl("/scoring"),
+                distribution: {
+                  "@type": "DataDownload",
+                  encodingFormat: "application/json",
+                  contentUrl: absoluteUrl(weekApiPath),
+                },
+                variableMeasured: [
+                  "夜虫指数（0〜100点）",
+                  "気温",
+                  "湿度",
+                  "風速",
+                  "降水量",
+                  "雲量",
+                  "月の照明割合",
+                  "月相",
+                ],
+                spatialCoverage: {
+                  "@type": "Place",
+                  name: area.name,
+                },
+              }
+            : undefined,
       },
       createBreadcrumbJsonLd([
         { name: siteConfig.name, path: "/" },
@@ -159,15 +172,13 @@ export default async function AreaPage({ params }: AreaPageProps) {
                 />
               </>
             ) : null}
-            <Button href="/areas" label="エリアを選ぶ" variant="primary" />
+            <Button href="/" label="エリアを選ぶ" variant="primary" />
           </div>
         }
         title={area.name}
       >
         <p className="area-aliases">{area.aliases.slice(0, 4).join(" / ")}</p>
-        <p className="page-intro-description">
-          夜虫指数は、今夜の気象条件と月明かりから、夜間に飛ぶ昆虫を観察しやすい時間を推定する指数です。
-        </p>
+        <p className="page-intro-description">{summary}</p>
         <p className="page-intro-note">
           各日の夜 19:00〜翌 0:00 を 1
           時間ごとに比較します。指数は最も条件がよい時間帯の参考値です。
@@ -194,11 +205,29 @@ export default async function AreaPage({ params }: AreaPageProps) {
       <section className="data-section night-guide-section">
         <h2>今夜の見方</h2>
         <p>{nightGuide}</p>
-        <Link href="/conditions">夜に虫が飛びやすい条件を見る</Link>
+        <div className="document-link-panel">
+          <Link href="/conditions">夜に虫が飛びやすい条件</Link>
+          <Link href="/scoring">指数の計算方法</Link>
+          <Link href="/data-sources">予報のデータ出典</Link>
+        </div>
       </section>
       <WeeklyForecastList forecasts={forecasts} />
+      {firstHour && <a href={weekApiPath}>この地域の週間予報をJSONで見る</a>}
     </PageScaffold>
   );
+}
+
+function forecastSummary(forecast: Forecast) {
+  const [year, month, day] = forecast.date.split("-");
+  const night = `${year}年${Number(month)}月${Number(day)}日夜の${forecast.area.name}`;
+  if (forecast.score === null) {
+    return `${night}は、必要な気象データがそろわず夜虫指数を算出できません。`;
+  }
+  const coverage =
+    forecast.status === "partial"
+      ? `予報がそろった${forecast.availableHours}時間帯のうち、`
+      : "";
+  return `${night}の夜虫指数は${forecast.score}点（${forecast.label}）です。${coverage}昆虫観察のおすすめは${forecast.bestTime}（日本時間）です。`;
 }
 
 const goodConditionsGuide = "今夜は観察条件が良い寄りです。";

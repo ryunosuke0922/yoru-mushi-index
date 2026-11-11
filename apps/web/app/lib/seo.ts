@@ -38,7 +38,6 @@ type PageMetadataInput = {
   title?: string;
   description?: string;
   path?: string;
-  canonicalPath?: string;
   type?: "website" | "article";
   robots?: Metadata["robots"];
 };
@@ -47,7 +46,6 @@ export function createPageMetadata({
   title,
   description = siteConfig.description,
   path = "/",
-  canonicalPath = path,
   type = "website",
   robots,
 }: PageMetadataInput = {}): Metadata {
@@ -59,12 +57,12 @@ export function createPageMetadata({
     },
     description,
     alternates: {
-      canonical: canonicalPath,
+      canonical: path,
     },
     openGraph: {
       title: socialTitle,
       description,
-      url: canonicalPath,
+      url: path,
       siteName: siteConfig.name,
       locale: siteConfig.locale,
       type,
@@ -76,7 +74,7 @@ export function createPageMetadata({
       description,
       images: ["/twitter-image"],
     },
-    robots,
+    ...(robots && { robots }),
   };
 }
 

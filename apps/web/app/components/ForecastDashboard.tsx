@@ -38,7 +38,7 @@ export function ForecastDashboard({
           </p>
           {showAreaLink ? (
             <div className="forecast-actions">
-              <Button href="/areas" label="エリアを選ぶ" variant="primary" />
+              <Button href="/" label="エリアを選ぶ" variant="primary" />
             </div>
           ) : null}
         </div>
@@ -61,7 +61,7 @@ export function ForecastDashboard({
 
           {showAreaLink ? (
             <div className="forecast-actions">
-              <Button href="/areas" label="エリアを選ぶ" variant="primary" />
+              <Button href="/" label="エリアを選ぶ" variant="primary" />
             </div>
           ) : null}
 

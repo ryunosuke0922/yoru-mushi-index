@@ -42,7 +42,7 @@ https://yorumushi.com
 
 ```txt
 /                         地方別のエリア選択
-/areas                    地方別のエリア選択
+/areas                    エリア選択（/ へ恒久リダイレクト）
 /area/[areaId]            エリア別の今日の指数 / 7 日分の指数
 /policy                   地点情報ポリシー
 /scoring                  スコア説明

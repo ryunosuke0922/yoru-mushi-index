@@ -18,6 +18,11 @@ export const metadata: Metadata = createPageMetadata({
 
 const faqItems = [
   {
+    question: "夜に虫が多い時間帯はいつですか？",
+    answer:
+      "夜虫指数では、各エリアの19時から翌0時までを1時間ずつ比べ、昆虫観察に最も条件のよい時間帯を表示します。例えば19時台に雨が降り、21時台に雨がやんで風が弱まれば、21時台の方が高い指数になることがあります。実際に虫が多い時間は種類や季節によって変わり、午前0時以降はこの予報の対象外です。",
+  },
+  {
     question: "夜虫指数が高い日は必ず虫が多く見られますか？",
     answer:
       "夜虫指数は観察条件の良さを示す目安です。実際の出現数は周辺環境、時期、直前の天候、観察時間によって変わります。",
@@ -106,6 +111,7 @@ export default function ConditionsPage() {
         </div>
 
         <div className="document-link-panel">
+          <Link href="/">今夜の観察時間をエリア別に見る</Link>
           <Link href="/scoring">スコアの詳しい計算を見る</Link>
           <Link href="/data-sources">データソースを見る</Link>
         </div>
