@@ -4,7 +4,7 @@ import { DocumentPage, PageScaffold } from "../components/PageScaffold";
 import { createPageMetadata } from "../lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "スコアの考え方",
+  title: "夜虫指数の計算方法",
   description:
     "夜虫指数が気温、湿度、風、雨、雲量、月明かりなどをどのように加点・減点しているかを説明します。",
   path: "/scoring",
@@ -13,9 +13,9 @@ export const metadata: Metadata = createPageMetadata({
 export default function ScoringPage() {
   return (
     <PageScaffold>
-      <DocumentPage title="スコアの考え方">
+      <DocumentPage title="夜虫指数の計算方法">
         <p>
-          夜虫指数は、夜間に飛翔する昆虫の観察しやすさを 0-100
+          夜虫指数は、蛾や甲虫などを観察しやすい条件の目安を 0〜100点
           で表す参考指数です。現在の配点は暫定的なルールで、観測記録による精度検証はこれから行います。
         </p>
 

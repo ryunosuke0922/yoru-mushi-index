@@ -17,9 +17,9 @@ export function AreaSelector() {
 
   return (
     <>
-      <PageIntro title="今夜の昆虫観察予報">
+      <PageIntro title="今夜の虫の飛びやすさを地域別に調べる">
         <p className="page-intro-description">
-          夜虫指数は、蛾や甲虫などが夜に飛びやすい条件を、気象と月明かり、地域の季節から推定します。エリアを選ぶと、今夜の観察に向いた時間と7日間の予報を確認できます。
+          蛾や甲虫が飛びやすい時間を、地域ごとに19時〜翌0時で予報。今夜から7日分を確認できます。地域を選び、時間帯ごとの指数を比べてください。気象と月明かり、季節による観察条件の目安です。
         </p>
       </PageIntro>
       <nav className="area-jump-nav" aria-label="エリア一覧の移動">
@@ -56,6 +56,7 @@ export function AreaSelector() {
                         className="area-card"
                         href={`/area/${area.id}`}
                         key={area.id}
+                        prefetch={false}
                       >
                         <span>
                           {area.name.replace(`${area.prefecture} `, "")}

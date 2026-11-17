@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-18",
+  "baseline": "0b0f25f",
+  "build": "Next.js 16.4.6, next build --webpack / next start",
+  "note": "localhost, one fresh isolated browser context per viewport/variant; no CPU/network throttling. TransferSize includes headers; navigation includes nearby links on detail. Timing is single sample, not improvement evidence.",
+  "runs": {
+    "metric390Before": {
+      "viewport": [390, 844],
+      "initial": {
+        "requests": 13,
+        "transferBytes": 37228,
+        "areaRequests": 5
+      },
+      "scroll": {
+        "requests": 108,
+        "transferBytes": 185904,
+        "areaRequests": 108
+      },
+      "navigation": {
+        "requests": 1,
+        "transferBytes": 8034,
+        "areaRequests": 1
+      },
+      "navMs": 1982,
+      "forecastVisible": true
+    },
+    "metric390After": {
+      "viewport": [390, 844],
+      "initial": {
+        "requests": 8,
+        "transferBytes": 30195,
+        "areaRequests": 0
+      },
+      "scroll": {
+        "requests": 0,
+        "transferBytes": 0,
+        "areaRequests": 0
+      },
+      "navigation": {
+        "requests": 4,
+        "transferBytes": 13667,
+        "areaRequests": 4
+      },
+      "navMs": 156,
+      "forecastVisible": true
+    },
+    "metric1440Before": {
+      "viewport": [1440, 900],
+      "initial": {
+        "requests": 24,
+        "transferBytes": 52576,
+        "areaRequests": 16
+      },
+      "scroll": {
+        "requests": 100,
+        "transferBytes": 172109,
+        "areaRequests": 100
+      },
+      "navigation": {
+        "requests": 1,
+        "transferBytes": 8034,
+        "areaRequests": 1
+      },
+      "navMs": 148,
+      "forecastVisible": true
+    },
+    "metric1440After": {
+      "viewport": [1440, 900],
+      "initial": {
+        "requests": 8,
+        "transferBytes": 30195,
+        "areaRequests": 0
+      },
+      "scroll": {
+        "requests": 0,
+        "transferBytes": 0,
+        "areaRequests": 0
+      },
+      "navigation": {
+        "requests": 4,
+        "transferBytes": 13668,
+        "areaRequests": 4
+      },
+      "navMs": 138,
+      "forecastVisible": true
+    }
+  }
+}

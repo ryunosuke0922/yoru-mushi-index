@@ -7,3 +7,4 @@ export {
   searchAreas,
 } from "./areaResolver";
 export type { CoarseArea } from "./types";
+export { areaForecastScope } from "./areaForecastScope";
