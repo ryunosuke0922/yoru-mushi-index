@@ -13,6 +13,12 @@ import { ForecastShareButton } from "../../components/ForecastShareButton";
 import { PageIntro, PageScaffold } from "../../components/PageScaffold";
 import { buildWeeklyForecast, type Forecast } from "../../lib/forecast";
 import { todayKey } from "../../lib/format";
+import { forecastTimeSummary } from "../../lib/forecastPresentation";
+import {
+  areaForecastTitle,
+  areaForecastDescription,
+} from "../../lib/areaPresentation";
+import { areaForecastScope } from "@yoru-mushi-index/area";
 import {
   absoluteUrl,
   createBreadcrumbJsonLd,
@@ -46,8 +52,8 @@ export async function generateMetadata({
   }
 
   return createPageMetadata({
-    title: `${area.name}の昆虫観察予報`,
-    description: `${area.name}（${area.aliases.slice(0, 4).join("・")}）で蛾や甲虫を観察するなら何時ごろか。今夜の夜虫指数、時間帯ごとの指数、雨・風・月明かりの条件と7日間の予報を確認できます。`,
+    title: areaForecastTitle(area),
+    description: areaForecastDescription(area),
     path: `/area/${area.id}`,
   });
 }
@@ -80,7 +86,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
     current.score === null
       ? `${current.area.name}の夜虫指数は、現在データを取得できません。`
       : `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
-    current.bestTime ? `おすすめ時間は ${current.bestTime}。` : null,
+    forecastTimeSummary(current),
     current.status === "partial"
       ? "取得できた時間帯のみで比較した、精度検証前の参考指数です。"
       : current.score !== null
@@ -178,6 +184,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
         title={area.name}
       >
         <p className="area-aliases">{area.aliases.slice(0, 4).join(" / ")}</p>
+        <p className="page-intro-note">{areaForecastScope(area)}</p>
         <p className="page-intro-description">{summary}</p>
         <p className="page-intro-note">
           各日の夜 19:00〜翌 0:00 を 1
@@ -223,11 +230,7 @@ function forecastSummary(forecast: Forecast) {
   if (forecast.score === null) {
     return `${night}は、必要な気象データがそろわず夜虫指数を算出できません。`;
   }
-  const coverage =
-    forecast.status === "partial"
-      ? `予報がそろった${forecast.availableHours}時間帯のうち、`
-      : "";
-  return `${night}の夜虫指数は${forecast.score}点（${forecast.label}）です。${coverage}昆虫観察のおすすめは${forecast.bestTime}（日本時間）です。`;
+  return `${night}の夜虫指数は${forecast.score}点（${forecast.label}）です。${forecastTimeSummary(forecast)}`;
 }
 
 const goodConditionsGuide = "今夜は観察条件が良い寄りです。";

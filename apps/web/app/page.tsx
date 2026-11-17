@@ -10,15 +10,14 @@ import {
   siteConfig,
 } from "./lib/seo";
 
-const title = "今夜の昆虫観察予報";
+const title = "今夜、虫が飛びやすい時間は？";
 const description =
-  "全国のエリア別に、蛾・甲虫などの夜虫指数と観察に向いた時間を掲載。気温、雨、風、月明かり、地域の季節をもとに、今夜から7日間の条件を確認できます。";
+  "蛾や甲虫が飛びやすい時間を、地域ごとに19時〜翌0時で予報。今夜から7日分を確認できます。地域を選び、時間帯ごとの観察条件の目安を比べられます。";
 
-export const metadata: Metadata = createPageMetadata({
-  title,
-  description,
-  path: "/",
-});
+export const metadata: Metadata = {
+  ...createPageMetadata({ title, description, path: "/" }),
+  title: { absolute: `${title} | ${siteConfig.name}` },
+};
 
 export default function Home() {
   const pageJsonLd = {

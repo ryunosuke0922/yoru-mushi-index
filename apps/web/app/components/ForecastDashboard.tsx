@@ -1,6 +1,10 @@
 import { Button } from "@astryxdesign/core/Button";
 import type { Forecast } from "../lib/forecast";
 import {
+  forecastTimeLabel,
+  forecastTimeSummary,
+} from "../lib/forecastPresentation";
+import {
   formatHour,
   formatJstMinute,
   formatNightDate,
@@ -71,7 +75,10 @@ export function ForecastDashboard({
           </div>
 
           {condition ? (
-            <p className="score-context">{forecast.bestTime} の条件で算出</p>
+            <p className="score-context">
+              {formatHour(condition.time)}–{formatHour(condition.intervalEnd)}{" "}
+              の条件を表示
+            </p>
           ) : null}
 
           <div className="forecast-meta">
@@ -81,11 +88,14 @@ export function ForecastDashboard({
             </span>
             {forecast.bestTime ? (
               <span>
-                <small>おすすめ</small>
+                <small>{forecastTimeLabel(forecast)}</small>
                 <strong>{forecast.bestTime}</strong>
               </span>
             ) : null}
           </div>
+          {forecast.score === 0 ? (
+            <p className="forecast-note">{forecastTimeSummary(forecast)}</p>
+          ) : null}
           <p className="forecast-note">
             観測記録による精度検証前の参考指数です。最終計算:
             {formatJstMinute(forecast.generatedAt)}
@@ -112,7 +122,7 @@ export function ForecastDashboard({
 
       <section className="content-grid">
         <article className="panel">
-          <SectionHeading title="おすすめ時間" />
+          <SectionHeading title="時間帯ごとの指数" />
           <div className="hourly">
             {forecast.hourly.map((item) => (
               <div
@@ -234,9 +244,12 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
             ) : null}
             {forecast.bestTime ? (
               <small className="daily-best-time">
-                <span>おすすめ</span>
+                <span>{forecastTimeLabel(forecast)}</span>
                 {forecast.bestTime}
               </small>
+            ) : null}
+            {forecast.score === 0 ? (
+              <small>{forecastTimeSummary(forecast)}</small>
             ) : null}
             {forecast.condition ? (
               <div className="daily-condition">

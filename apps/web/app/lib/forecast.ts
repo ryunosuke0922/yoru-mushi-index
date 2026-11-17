@@ -119,11 +119,11 @@ function buildForecastFromWeather(
       status === "unavailable"
         ? "必要な気象データを取得できないため、指数を表示できません。時間をおいて再度ご確認ください。"
         : status === "partial"
-          ? `気象データのある ${hourly.length} / 5 時間帯だけを表示しています。おすすめは取得できた時間帯の中での比較です。`
+          ? `気象データのある ${hourly.length} / 5 時間帯だけを表示しています。最も条件がよい時間は取得できた時間帯の中での比較です。`
           : null,
     score,
     label: score === null ? null : scoreLabel(score),
-    bestTime: bestHour ? formatBestTime(bestHour) : null,
+    bestTime: bestHour && bestHour.score > 0 ? formatBestTime(bestHour) : null,
     // Deprecated: no observed event or calibration supports a percentage.
     probabilityBand: null,
     hourly,

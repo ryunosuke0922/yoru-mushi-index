@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { ScoreReason } from "@yoru-mushi-index/core";
 import { colors } from "../lib/designTokens";
 import { formatNightDate } from "../lib/format";
+import { forecastTimeSummary } from "../lib/forecastPresentation";
 
 type ForecastImageShareButtonProps = {
   areaName: string;
@@ -58,7 +59,7 @@ export function ForecastImageShareButton({
       try {
         await navigator.share({
           files: [file],
-          text: `${areaName}の夜虫指数は ${score}。おすすめは ${bestTime ?? "なし"} です。${partial ? "取得できた時間帯のみの参考値です。" : "精度検証前の参考指数です。"}\n${url}`,
+          text: `${areaName}の夜虫指数は ${score}。${forecastTimeSummary({ score, bestTime, status: partial ? "partial" : "available" })}${partial ? "取得できた時間帯のみの参考値です。" : "精度検証前の参考指数です。"}\n${url}`,
           title: "夜虫指数",
         });
       } catch {
@@ -135,8 +136,8 @@ async function createForecastImage({
       y: 404,
     },
     {
-      key: "おすすめ",
-      value: bestTime ?? "-",
+      key: "時間内の最高",
+      value: score === 0 ? "該当なし" : (bestTime ?? "-"),
       width: 306,
       x: layout.leftX,
       y: 454,
@@ -229,9 +230,10 @@ function metaChip(
   context.fillStyle = colors.muted;
   context.font = font(800, 18);
   context.fillText(key, x + 18, y + 27);
+  const keyWidth = context.measureText(key).width;
   context.fillStyle = colors.text;
   context.font = font(800, 22);
-  context.fillText(value, x + 18 + context.measureText(key).width + 16, y + 28);
+  context.fillText(value, x + 18 + keyWidth + 16, y + 28);
 }
 
 function drawWrappedText(

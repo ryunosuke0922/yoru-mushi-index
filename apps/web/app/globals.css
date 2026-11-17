@@ -543,6 +543,7 @@ h2 {
   gap: 8px;
   max-width: 100%;
   min-height: 34px;
+  flex-wrap: wrap;
   padding: 8px 12px;
 }
 
@@ -871,6 +872,7 @@ h2 {
   gap: 8px;
   justify-content: space-between;
   min-height: 32px;
+  flex-wrap: wrap;
   padding: 7px 10px;
 }
 

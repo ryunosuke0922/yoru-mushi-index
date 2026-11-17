@@ -3,7 +3,7 @@ import { DocumentPage, PageScaffold } from "../components/PageScaffold";
 import { createPageMetadata } from "../lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "データソース",
+  title: "昆虫観察予報に使う気象・月明かりのデータ",
   description:
     "夜虫指数で使用している Open-Meteo の気象予報データと SunCalc の月条件データを説明します。",
   path: "/data-sources",
@@ -12,10 +12,28 @@ export const metadata: Metadata = createPageMetadata({
 export default function DataSourcesPage() {
   return (
     <PageScaffold>
-      <DocumentPage title="データソース">
+      <DocumentPage title="昆虫観察予報に使う気象・月明かりのデータ">
         <p>
-          気象予報データは Open-Meteo、月条件は SunCalc を使って計算しています。
+          気象予報は Open-Meteo、月明かりは SunCalc
+          による計算、地域の季節補正は気象庁の平年値を使います。
         </p>
+
+        <ul>
+          <li>
+            <a href="https://open-meteo.com/en/docs">Open-Meteo</a>
+            ：各時間帯の気温・雨・風などの予報
+          </li>
+          <li>
+            <a href="https://github.com/mourner/suncalc">SunCalc</a>
+            ：月の照明割合・高度・月相の計算
+          </li>
+          <li>
+            <a href="https://www.data.jma.go.jp/stats/data/mdrr/normal/index.html">
+              気象庁の平年値
+            </a>
+            ：地域ごとの季節の目安
+          </li>
+        </ul>
 
         <h2>気象データ</h2>
         <p>
@@ -68,8 +86,7 @@ export default function DataSourcesPage() {
 
         <h2>エリアデータ</h2>
         <p>
-          エリアは 20km
-          程度の広域単位で定義し、公開レスポンスには正確な緯度経度を返しません。内部では気象予報と月条件の計算に代表座標を使います。
+          各エリアの一つの代表地域の気象予報と月条件から参考指数を計算します。エリア名に含む全域を個別に予報するものではなく、離れた島々をまとめたエリアでは島ごとの計算はしていません。各予報ページで代表する範囲を案内し、公開レスポンスには正確な緯度経度を返しません。
         </p>
         <ul>
           <li>エリア別・月別の季節係数: 平年の気温による補正</li>
