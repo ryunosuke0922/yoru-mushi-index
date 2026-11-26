@@ -13,7 +13,7 @@ import { ForecastShareButton } from "../../components/ForecastShareButton";
 import { PageIntro, PageScaffold } from "../../components/PageScaffold";
 import { buildWeeklyForecast, type Forecast } from "../../lib/forecast";
 import { todayKey } from "../../lib/format";
-import { forecastTimeSummary } from "../../lib/forecastPresentation";
+import { forecastTiming } from "../../lib/forecastPresentation";
 import {
   areaForecastTitle,
   areaForecastDescription,
@@ -78,23 +78,41 @@ export default async function AreaPage({ params }: AreaPageProps) {
 
   const shareUrl = absoluteUrl(`/area/${area.id}`);
   const weekApiPath = `/api/forecast/week?${new URLSearchParams({ areaId: area.id, date: today })}`;
-  const summary = forecastSummary(current);
+  const timing = forecastTiming(current);
+  const summary = forecastSummary(current, timing.summary);
   const hours = forecasts.flatMap((forecast) => forecast.hourly);
   const firstHour = hours[0];
   const lastHour = hours.at(-1);
-  const shareText = [
-    current.score === null
-      ? `${current.area.name}の夜虫指数は、現在データを取得できません。`
-      : `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
-    forecastTimeSummary(current),
-    current.status === "partial"
-      ? "取得できた時間帯のみで比較した、精度検証前の参考指数です。"
-      : current.score !== null
-        ? "精度検証前の参考指数です。"
-        : null,
-  ]
-    .filter((line): line is string => line !== null)
-    .join("\n");
+  let shareButtons = null;
+  if (current.score !== null && current.label !== null) {
+    const shareText = [
+      `${current.area.name}の夜虫指数は ${current.score} / 100（${current.label}）です。`,
+      timing.summary,
+      current.status === "partial"
+        ? "取得できた時間帯のみを使った、精度検証前の参考指数です。"
+        : "精度検証前の参考指数です。",
+    ].join("\n");
+    shareButtons = (
+      <>
+        <ForecastShareButton
+          text={shareText}
+          title={`${current.area.name}の夜虫指数は ${current.score}`}
+          url={shareUrl}
+        />
+        <ForecastImageShareButton
+          areaName={current.area.name}
+          timeSummary={timing.summary}
+          shareText={shareText}
+          date={current.date}
+          label={current.label}
+          partial={current.status === "partial"}
+          reasons={current.reasons}
+          score={current.score}
+          url={shareUrl}
+        />
+      </>
+    );
+  }
   const nightGuide = createNightGuide(current);
 
   const pageJsonLd = {
@@ -159,25 +177,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
       <PageIntro
         action={
           <div className="page-intro-actions">
-            {current.score !== null && current.label !== null ? (
-              <>
-                <ForecastShareButton
-                  text={shareText}
-                  title={`${current.area.name}の夜虫指数は ${current.score}`}
-                  url={shareUrl}
-                />
-                <ForecastImageShareButton
-                  areaName={current.area.name}
-                  bestTime={current.bestTime}
-                  date={current.date}
-                  label={current.label}
-                  partial={current.status === "partial"}
-                  reasons={current.reasons}
-                  score={current.score}
-                  url={shareUrl}
-                />
-              </>
-            ) : null}
+            {shareButtons}
             <Button href="/" label="エリアを選ぶ" variant="primary" />
           </div>
         }
@@ -190,6 +190,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
           各日の夜 19:00〜翌 0:00 を 1
           時間ごとに比較します。指数は最も条件がよい時間帯の参考値です。
         </p>
+        <Button href="#weekly-forecast" label="7日分の指数を見る" />
         {nearbyAreas.length > 0 ? (
           <nav className="nearby-area-nav" aria-label="近くのエリア">
             <span>近くのエリア</span>
@@ -204,11 +205,7 @@ export default async function AreaPage({ params }: AreaPageProps) {
         ) : null}
       </PageIntro>
 
-      <ForecastDashboard
-        forecast={current}
-        showAreaLink={false}
-        showAreaName={false}
-      />
+      <ForecastDashboard forecast={current} />
       <section className="data-section night-guide-section">
         <h2>今夜の見方</h2>
         <p>{nightGuide}</p>
@@ -224,13 +221,13 @@ export default async function AreaPage({ params }: AreaPageProps) {
   );
 }
 
-function forecastSummary(forecast: Forecast) {
+function forecastSummary(forecast: Forecast, timeSummary: string) {
   const [year, month, day] = forecast.date.split("-");
   const night = `${year}年${Number(month)}月${Number(day)}日夜の${forecast.area.name}`;
   if (forecast.score === null) {
     return `${night}は、必要な気象データがそろわず夜虫指数を算出できません。`;
   }
-  return `${night}の夜虫指数は${forecast.score}点（${forecast.label}）です。${forecastTimeSummary(forecast)}`;
+  return `${night}の夜虫指数は${forecast.score}点（${forecast.label}）です。${timeSummary}`;
 }
 
 const goodConditionsGuide = "今夜は観察条件が良い寄りです。";

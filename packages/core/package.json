@@ -6,9 +6,6 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "dependencies": {
-    "@yoru-mushi-index/shared": "workspace:*"
-  },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },

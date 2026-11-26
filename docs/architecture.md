@@ -12,7 +12,6 @@ packages/
   weather/
   astro/
   area/
-  shared/
 ```
 
 ## `apps/web`

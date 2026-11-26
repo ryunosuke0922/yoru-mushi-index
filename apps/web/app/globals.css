@@ -54,7 +54,8 @@ a {
 
 a:focus-visible,
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+.daily-grid:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
@@ -493,10 +494,6 @@ h2 {
   padding: 8px 13px;
 }
 
-.forecast-actions {
-  margin-top: 16px;
-}
-
 .score {
   align-items: end;
   display: flex;
@@ -726,16 +723,13 @@ h2 {
 }
 
 .hour-highlight,
-.taxon-highlight,
-.daily-card-highlight {
+.taxon-highlight {
   background: var(--green-soft);
   border-color: var(--green-border-hover);
 }
 
 .hour-highlight time,
-.taxon-highlight span,
-.daily-card-highlight > span,
-.daily-card-highlight small {
+.taxon-highlight span {
   color: var(--green);
 }
 
@@ -791,8 +785,8 @@ h2 {
 
 .daily-grid {
   display: grid;
-  gap: 10px;
-  grid-auto-columns: minmax(260px, 0.34fr);
+  gap: 12px;
+  grid-auto-columns: min(100%, max(16rem, 32%));
   grid-auto-flow: column;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -802,106 +796,16 @@ h2 {
 }
 
 .daily-card {
-  animation: soft-enter 420ms var(--ease-out) both;
   background: var(--surface-soft);
-  border: 0.5px solid transparent;
-  border-radius: 18px;
-  display: grid;
-  gap: 10px;
-  min-height: 190px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-container);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
   padding: 16px;
   scroll-snap-align: start;
-}
-
-.daily-card:nth-child(2) {
-  animation-delay: 50ms;
-}
-
-.daily-card:nth-child(3) {
-  animation-delay: 100ms;
-}
-
-.daily-card:nth-child(4) {
-  animation-delay: 150ms;
-}
-
-.daily-card:nth-child(5) {
-  animation-delay: 200ms;
-}
-
-.daily-card:nth-child(6) {
-  animation-delay: 250ms;
-}
-
-.daily-card:nth-child(7) {
-  animation-delay: 300ms;
-}
-
-.daily-card-header {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-}
-
-.daily-card-header > span,
-.daily-card small {
-  color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 650;
-}
-
-.daily-card-header > span {
-  color: var(--green);
-  font-size: 0.78rem;
-  font-weight: 750;
-}
-
-.daily-date {
-  color: var(--muted);
-  font-size: 0.66rem;
-  font-weight: 650;
-  margin-top: -6px;
-}
-
-.daily-best-time {
-  align-items: center;
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
-  border-radius: 999px;
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-  min-height: 32px;
-  flex-wrap: wrap;
-  padding: 7px 10px;
-}
-
-.daily-best-time span {
-  color: var(--muted);
-  font-size: 0.64rem;
-}
-
-.daily-score {
-  align-items: end;
-  display: flex;
-  gap: 6px;
-}
-
-.daily-score strong {
-  color: var(--green);
-  font-size: 2.35rem;
-  line-height: 0.9;
-}
-
-.daily-score span {
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  padding-bottom: 5px;
-}
-
-.daily-card-highlight .daily-score strong {
-  color: var(--green);
+  font-variant-numeric: tabular-nums;
 }
 
 .daily-card-highlight {
@@ -909,54 +813,69 @@ h2 {
   border-color: var(--accent);
 }
 
-.daily-card-highlight .daily-card-header > span,
-.daily-card-highlight small,
-.daily-card-highlight small span {
-  color: var(--green);
+.daily-card-header {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  justify-content: space-between;
 }
 
-.daily-card-header p {
-  color: var(--text);
-  font-size: 0.78rem;
-  font-weight: 650;
+.daily-card-header h3 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin: 0;
 }
 
-.daily-card-highlight .daily-card-header p {
+.daily-card small,
+.daily-card-header p,
+.daily-score span {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.daily-score {
+  align-items: baseline;
+  display: flex;
+  gap: 4px;
+}
+
+.daily-score strong {
   color: var(--green);
+  font-size: 2.35rem;
+  line-height: 1;
+}
+
+.daily-card .daily-best-time {
+  display: grid;
+  gap: 4px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.daily-best-time span {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
 }
 
 .daily-condition {
+  border-top: 1px solid var(--border);
   display: grid;
-  gap: 6px;
+  gap: 8px 16px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: auto;
+  padding-top: 12px;
 }
 
 .daily-condition span {
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
-  border-radius: 10px;
-  color: var(--text);
+  color: var(--color-text-primary);
   display: grid;
-  gap: 3px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.1;
-  min-width: 0;
-  padding: 8px 9px;
-}
-
-.daily-condition small {
-  color: var(--muted);
-  font-size: 0.58rem;
-  font-weight: 650;
-}
-
-.daily-card-highlight .daily-condition span {
-  background: color-mix(in srgb, var(--surface) 52%, transparent);
-  color: var(--green);
-}
-
-.daily-card-highlight .daily-condition small {
-  color: var(--green);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
 }
 
 .data-item {

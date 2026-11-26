@@ -5,11 +5,11 @@ import { useState } from "react";
 import type { ScoreReason } from "@yoru-mushi-index/core";
 import { colors } from "../lib/designTokens";
 import { formatNightDate } from "../lib/format";
-import { forecastTimeSummary } from "../lib/forecastPresentation";
 
 type ForecastImageShareButtonProps = {
   areaName: string;
-  bestTime: string | null;
+  timeSummary: string;
+  shareText: string;
   date: string;
   label: string;
   partial?: boolean;
@@ -17,7 +17,10 @@ type ForecastImageShareButtonProps = {
   score: number;
   url: string;
 };
-type ForecastImageInput = Omit<ForecastImageShareButtonProps, "url">;
+type ForecastImageInput = Omit<
+  ForecastImageShareButtonProps,
+  "url" | "shareText"
+>;
 
 const imageSize = {
   width: 1200,
@@ -31,20 +34,21 @@ const layout = {
 
 export function ForecastImageShareButton({
   areaName,
-  bestTime,
+  timeSummary,
   date,
   label,
   partial = false,
   reasons,
   score,
   url,
+  shareText,
 }: ForecastImageShareButtonProps) {
   const [status, setStatus] = useState<"idle" | "done">("idle");
 
   async function handleClick() {
     const blob = await createForecastImage({
       areaName,
-      bestTime,
+      timeSummary,
       date,
       label,
       partial,
@@ -59,7 +63,7 @@ export function ForecastImageShareButton({
       try {
         await navigator.share({
           files: [file],
-          text: `${areaName}の夜虫指数は ${score}。${forecastTimeSummary({ score, bestTime, status: partial ? "partial" : "available" })}${partial ? "取得できた時間帯のみの参考値です。" : "精度検証前の参考指数です。"}\n${url}`,
+          text: `${shareText}\n${url}`,
           title: "夜虫指数",
         });
       } catch {
@@ -81,9 +85,9 @@ export function ForecastImageShareButton({
   );
 }
 
-async function createForecastImage({
+export async function createForecastImage({
   areaName,
-  bestTime,
+  timeSummary,
   date,
   label,
   partial,
@@ -127,24 +131,17 @@ async function createForecastImage({
   context.font = font(800, 28);
   context.fillText("/ 100", scoreText.length >= 3 ? 500 : 390, 322);
 
-  const chips = [
-    {
-      key: "日付",
-      value: formatNightDate(date),
-      width: 306,
-      x: layout.leftX,
-      y: 404,
-    },
-    {
-      key: "時間内の最高",
-      value: score === 0 ? "該当なし" : (bestTime ?? "-"),
-      width: 306,
-      x: layout.leftX,
-      y: 454,
-    },
-  ];
-  chips.forEach((chip) =>
-    metaChip(context, chip.key, chip.value, chip.x, chip.y, chip.width),
+  metaChip(context, "日付", formatNightDate(date), layout.leftX, 368, 306);
+
+  context.fillStyle = colors.text;
+  context.font = font(600, 22);
+  drawWrappedText(
+    context,
+    timeSummary,
+    layout.leftX,
+    448,
+    layout.dividerX - layout.leftX - 32,
+    30,
   );
 
   context.fillStyle = colors.muted;
@@ -233,7 +230,12 @@ function metaChip(
   const keyWidth = context.measureText(key).width;
   context.fillStyle = colors.text;
   context.font = font(800, 22);
-  context.fillText(value, x + 18 + keyWidth + 16, y + 28);
+  context.fillText(
+    value,
+    x + 18 + keyWidth + 16,
+    y + 28,
+    width - keyWidth - 52,
+  );
 }
 
 function drawWrappedText(
@@ -247,11 +249,12 @@ function drawWrappedText(
   let line = "";
   let offsetY = 0;
 
-  for (const character of text) {
-    const candidate = `${line}${character}`;
+  // Keep forecast intervals and hour labels together across line breaks.
+  for (const [token] of text.matchAll(/\d{2}:\d{2}-\d{2}:\d{2}|\d+時台|./gu)) {
+    const candidate = line + token;
     if (context.measureText(candidate).width > maxWidth && line) {
       context.fillText(line, x, y + offsetY);
-      line = character;
+      line = token;
       offsetY += lineHeight;
     } else {
       line = candidate;

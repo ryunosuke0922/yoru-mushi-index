@@ -1,9 +1,5 @@
-import { Button } from "@astryxdesign/core/Button";
 import type { Forecast } from "../lib/forecast";
-import {
-  forecastTimeLabel,
-  forecastTimeSummary,
-} from "../lib/forecastPresentation";
+import { forecastTiming } from "../lib/forecastPresentation";
 import {
   formatHour,
   formatJstMinute,
@@ -13,38 +9,23 @@ import {
 } from "../lib/format";
 import { DataItem, SectionHeading } from "./PageScaffold";
 
-type ForecastDashboardProps = {
-  forecast: Forecast;
-  showAreaLink?: boolean;
-  showAreaName?: boolean;
-};
 const highlightScore = 90;
 
-export function ForecastDashboard({
-  forecast,
-  showAreaLink = true,
-  showAreaName = true,
-}: ForecastDashboardProps) {
+export function ForecastDashboard({ forecast }: { forecast: Forecast }) {
   const condition = forecast.condition;
+  const timing = forecastTiming(forecast);
 
   if (forecast.status === "unavailable") {
     return (
       <section className="forecast-card" aria-label="今日の夜虫指数">
         <div className="forecast-main">
-          <SectionHeading
-            title={showAreaName ? forecast.area.name : "今夜の夜虫指数"}
-          />
+          <SectionHeading title="今夜の夜虫指数" />
           <h2>気象データを取得できません</h2>
           <p className="page-intro-description">{forecast.dataNotice}</p>
           <p className="forecast-note">
             対象日: {formatNightDate(forecast.date)} · 最終確認:
             {formatJstMinute(forecast.generatedAt)}
           </p>
-          {showAreaLink ? (
-            <div className="forecast-actions">
-              <Button href="/" label="エリアを選ぶ" variant="primary" />
-            </div>
-          ) : null}
         </div>
       </section>
     );
@@ -55,19 +36,9 @@ export function ForecastDashboard({
       <section className="forecast-card" aria-label="今日の夜虫指数">
         <div className="forecast-main">
           <div className="area-row">
-            {showAreaName ? (
-              <h2>{forecast.area.name}</h2>
-            ) : (
-              <h2>今夜の夜虫指数</h2>
-            )}
+            <h2>今夜の夜虫指数</h2>
             <p className="badge">{forecast.label}</p>
           </div>
-
-          {showAreaLink ? (
-            <div className="forecast-actions">
-              <Button href="/" label="エリアを選ぶ" variant="primary" />
-            </div>
-          ) : null}
 
           <div className="score" aria-label={`夜虫指数 ${forecast.score}`}>
             <strong>{forecast.score}</strong>
@@ -88,13 +59,13 @@ export function ForecastDashboard({
             </span>
             {forecast.bestTime ? (
               <span>
-                <small>{forecastTimeLabel(forecast)}</small>
-                <strong>{forecast.bestTime}</strong>
+                <small>{timing.label}</small>
+                <strong>{timing.value}</strong>
               </span>
             ) : null}
           </div>
           {forecast.score === 0 ? (
-            <p className="forecast-note">{forecastTimeSummary(forecast)}</p>
+            <p className="forecast-note">{timing.summary}</p>
           ) : null}
           <p className="forecast-note">
             観測記録による精度検証前の参考指数です。最終計算:
@@ -218,63 +189,75 @@ export function WeeklyForecastList({ forecasts }: { forecasts: Forecast[] }) {
   const baseDate = forecasts[0]?.date;
 
   return (
-    <section className="data-section weekly-section">
+    <section
+      className="data-section weekly-section"
+      id="weekly-forecast"
+      tabIndex={-1}
+    >
       <SectionHeading title="7 日分の指数" />
-      <div className="daily-grid">
-        {forecasts.map((forecast) => (
-          <article
-            className={`daily-card ${isHighlightedScore(forecast.score) ? "daily-card-highlight" : ""}`}
-            key={forecast.date}
-          >
-            <div className="daily-card-header">
-              <span>
-                {baseDate
-                  ? nightLabel(forecast.date, baseDate)
-                  : formatNightDate(forecast.date)}
-              </span>
-              <p>{forecast.label ?? "データなし"}</p>
-            </div>
-            <span className="daily-date">{formatNightDate(forecast.date)}</span>
-            <div className="daily-score">
-              <strong>{forecast.score ?? "—"}</strong>
-              {forecast.score !== null ? <span>/ 100</span> : null}
-            </div>
-            {forecast.status === "partial" ? (
-              <small>一部時間帯のデータのみ</small>
-            ) : null}
-            {forecast.bestTime ? (
-              <small className="daily-best-time">
-                <span>{forecastTimeLabel(forecast)}</span>
-                {forecast.bestTime}
-              </small>
-            ) : null}
-            {forecast.score === 0 ? (
-              <small>{forecastTimeSummary(forecast)}</small>
-            ) : null}
-            {forecast.condition ? (
-              <div className="daily-condition">
-                <span>
-                  <small>時刻</small>
-                  <time dateTime={forecast.condition.time}>
-                    {formatHour(forecast.condition.time)}
+      <div
+        className="daily-grid"
+        role="region"
+        aria-label="日別の観察予報"
+        tabIndex={0}
+      >
+        {forecasts.map((forecast) => {
+          const timing = forecastTiming(forecast);
+          const date = formatNightDate(forecast.date);
+          const label = baseDate ? nightLabel(forecast.date, baseDate) : date;
+          return (
+            <article
+              className={`daily-card ${isHighlightedScore(forecast.score) ? "daily-card-highlight" : ""}`}
+              key={forecast.date}
+            >
+              <div className="daily-card-header">
+                <h3>
+                  <time dateTime={forecast.date}>
+                    {label !== date && <span>{label} </span>}
+                    {date}
                   </time>
-                </span>
-                <span>
-                  <small>気温</small>
-                  {forecast.condition.temperature.toFixed(1)}℃
-                </span>
-                <span>
-                  <small>湿度</small>
-                  {Math.round(forecast.condition.humidity)}%
-                </span>
-                <span>
-                  <small>風速</small>
-                  {forecast.condition.windSpeed.toFixed(1)}m/s
-                </span>
+                </h3>
+                <p>{forecast.label ?? "データなし"}</p>
               </div>
-            ) : null}
-          </article>
-        ))}
+              <div className="daily-score">
+                <strong>{forecast.score ?? "—"}</strong>
+                {forecast.score !== null ? <span>/ 100</span> : null}
+              </div>
+              {forecast.status === "partial" ? (
+                <small>一部時間帯のデータのみ</small>
+              ) : null}
+              {forecast.bestTime ? (
+                <small className="daily-best-time">
+                  <span>{timing.label}</span>
+                  {timing.value}
+                </small>
+              ) : null}
+              {forecast.score === 0 ? <small>{timing.summary}</small> : null}
+              {forecast.condition ? (
+                <div className="daily-condition">
+                  <span>
+                    <small>気象の代表時刻</small>
+                    <time dateTime={forecast.condition.time}>
+                      {formatHour(forecast.condition.time)}
+                    </time>
+                  </span>
+                  <span>
+                    <small>気温</small>
+                    {forecast.condition.temperature.toFixed(1)}℃
+                  </span>
+                  <span>
+                    <small>湿度</small>
+                    {Math.round(forecast.condition.humidity)}%
+                  </span>
+                  <span>
+                    <small>風速</small>
+                    {forecast.condition.windSpeed.toFixed(1)}m/s
+                  </span>
+                </div>
+              ) : null}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

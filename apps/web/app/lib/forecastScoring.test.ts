@@ -141,6 +141,15 @@ describe("forecastScoring", () => {
     );
   });
 
+  it("同率首位の先頭の時間帯を代表値にする", () => {
+    const hourly = scoreHours(completeWeatherHours()).map((hour) => ({
+      ...hour,
+      score:
+        hour.time.endsWith("20:00") || hour.time.endsWith("22:00") ? 90 : 70,
+    }));
+    expect(findBestHour(hourly)?.time).toBe("2026-06-05T20:00");
+  });
+
   it("最高スコアの時間、表示時間、取得条件を返す", () => {
     const hours = [
       {

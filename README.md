@@ -68,7 +68,6 @@ packages/
   weather/          Open-Meteo client and response normalization
   astro/            SunCalc wrapper for moon conditions
   area/             Coarse area fixtures and privacy-safe area resolution
-  shared/           Small shared utilities
 docs/
   architecture.md
   development.md

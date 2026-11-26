@@ -1,4 +1,4 @@
-import { clamp } from "@yoru-mushi-index/shared";
+import { clamp } from "./clamp";
 import type {
   AreaCondition,
   MoonCondition,

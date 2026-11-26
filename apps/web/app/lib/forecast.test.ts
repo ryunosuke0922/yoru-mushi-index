@@ -90,6 +90,19 @@ describe("forecast data integrity", () => {
     ]);
   });
 
+  it("1時間帯だけ取得した日の欠測注記には取得数を示す", async () => {
+    const response = providerResponse();
+    for (const time of ["20:00", "21:00", "22:00", "23:00"]) {
+      const i = response.hourly.time.indexOf(`2026-06-05T${time}`);
+      response.hourly.temperature_2m[i] = null;
+    }
+    vi.mocked(fetchOpenMeteoForecast).mockResolvedValue(response);
+    const result = await buildForecast("tokyo-tama-20km-01", "2026-06-05");
+    expect(result?.dataNotice).toBe(
+      "気象データのある 1 / 5 時間帯だけを表示しています。",
+    );
+  });
+
   it("翌0時の降水が欠測なら23時台をおすすめ候補から除外する", async () => {
     const response = providerResponse();
     const midnight = response.hourly.time.indexOf("2026-06-06T00:00");

@@ -1,2 +1,3 @@
-# Keep the vendored upstream skill intact.
+# Keep the vendored upstream skills intact.
 .agents/skills/unslop/
+.agents/skills/modern-web-guidance/

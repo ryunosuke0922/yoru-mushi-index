@@ -85,3 +85,5 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 共有ボタンやリンクボタンには [Astryx](https://github.com/meta/astryx) の `Button` を使います。`DesignProvider` が Neutral テーマと Next.js のリンクを設定し、`globals.css` で夜虫指数の配色と日本語フォントを割り当てます。
 
 画面をレビューする際は、このプロジェクトの Codex で「`$unslop` でエリア選択画面を確認」のように指定できます。同梱した [unslop](https://github.com/heydamir/unslop/tree/97daa3eb365670ea3f87ed85356cbfcee18105a5/skills/unslop) は Damir Sokolovsky 作、[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) です。
+
+Web 標準やキーボード操作を確認するときは、プロジェクト同梱の [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance/tree/2b4aa13a72dd47cd135b06ce5abfccd92e19b24f/skills/modern-web-guidance) を使います。例として、`pnpm dlx modern-web-guidance@latest search "keyboard accessible scroll container"` で関連ガイドを検索できます。
